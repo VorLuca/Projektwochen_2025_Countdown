@@ -25,44 +25,48 @@ tasks.test {
     useJUnitPlatform()
 }
 
+// Setzt den Einstiegspunkt für die Anwendung
 application {
     mainClass.set("org.example.MainKt")
 }
 
+// Manifest-Einträge für reguläre JARs setzen
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"
     }
 }
 
+// Fat JAR Task: erstellt eine ausführbare JAR mit allen Abhängigkeiten
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
     archiveVersion.set("")
 
-    // Alle Dateien und Abhängigkeiten hinzufügen
+    // Füge die Haupt-Klassen des Projekts ein
     from(sourceSets.main.get().output)
 
-    // Abhängigkeiten einfügen (runtimeClasspath sicherstellen)
+    // Schließe alle Abhängigkeiten aus der runtimeClasspath ein
     dependsOn(configurations.runtimeClasspath)
     from(configurations.runtimeClasspath.get().map { zipTree(it) })
 
-    // Umgang mit doppelten Dateien
+    // Setze den Umgang mit doppelten Dateien (überspringe sie)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // Manifest explizit setzen
+    // Manifest-Eintrag für die ausführbare JAR setzen
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"
     }
 }
 
+// Kotlin-Toolchain konfigurieren
 kotlin {
     jvmToolchain(17)
 }
 
+// Stellt sicher, dass `fatJar` bei `build` ausgeführt wird
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
-
 
 
