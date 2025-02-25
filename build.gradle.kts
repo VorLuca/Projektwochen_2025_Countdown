@@ -25,15 +25,13 @@ tasks.test {
     useJUnitPlatform()
 }
 
-// Setzt den Einstiegspunkt für die Anwendung
 application {
-    mainClass.set("org.example.MainKt") // Hier den Einstiegspunkt angeben
+    mainClass.set("org.example.MainKt")
 }
 
-// Setze das Manifest explizit, wenn `fatJar` erstellt wird
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "org.example.MainKt" // Den Einstiegspunkt hier sicherstellen
+        attributes["Main-Class"] = "org.example.MainKt"
     }
 }
 
