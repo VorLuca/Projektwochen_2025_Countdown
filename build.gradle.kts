@@ -33,7 +33,6 @@ tasks.register<Jar>("fatJar") {
     archiveClassifier.set("")
     archiveVersion.set("")
 
-    // Manifest mit Main-Class
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"
     }
@@ -42,7 +41,10 @@ tasks.register<Jar>("fatJar") {
 
     dependsOn(configurations.runtimeClasspath)
     from(configurations.runtimeClasspath.get().map { zipTree(it) })
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
 
 tasks.build {
     dependsOn(tasks.named("fatJar"))
