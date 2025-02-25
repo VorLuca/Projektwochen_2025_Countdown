@@ -12,7 +12,7 @@ repositories {
 tasks.withType<Jar> {
     manifest {
         attributes(
-            "Main-Class" to "org.example.Main.kt"
+            "Main-Class" to "org.example.Main"
         )
     }
 }
