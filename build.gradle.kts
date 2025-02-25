@@ -28,6 +28,13 @@ kotlin {
     jvmToolchain(17)
 }
 
+tasks.withType<Jar> {
+    // Manifest explizit setzen
+    manifest {
+        attributes["Main-Class"] = "org.example.MainKt"  // Den Einstiegspunkt auf die korrekte Klasse setzen
+    }
+}
+
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
@@ -42,16 +49,12 @@ tasks.register<Jar>("fatJar") {
 
     // Umgang mit doppelten Dateien
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    // Manifest explizit setzen, um Main-Class zu definieren
-    manifest {
-        attributes["Main-Class"] = "org.example.MainKt"  // Hier den richtigen Einstiegspunkt sicherstellen
-    }
 }
 
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
+
 
 
 
