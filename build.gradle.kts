@@ -59,7 +59,6 @@ tasks.register<Jar>("fatJar") {
     }
 }
 
-// Kotlin-Toolchain konfigurieren (keine Notwendigkeit, languageVersion separat zu setzen)
 kotlin {
     jvmToolchain(17) // Hier wird die JVM Toolchain auf Java 17 gesetzt
 }
