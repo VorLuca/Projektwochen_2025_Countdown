@@ -40,10 +40,15 @@ tasks.register<Jar>("fatJar") {
     archiveClassifier.set("")
     archiveVersion.set("")
 
-    // Alle Dateien und Abhängigkeiten hinzufügen
+    // Manifest mit Main-Class
+    manifest {
+        attributes["Main-Class"] = "org.example.MainKt"
+    }
+
+    // Alle Dateien und Abhängigkeiten einfügen
     from(sourceSets.main.get().output)
 
-    // Abhängigkeiten einfügen
+    // Abhängigkeiten einfügen (runtimeClasspath sicherstellen, dass alle Abhängigkeiten hinzugefügt werden)
     dependsOn(configurations.runtimeClasspath)
     from(configurations.runtimeClasspath.get().map { zipTree(it) })
 
@@ -54,6 +59,7 @@ tasks.register<Jar>("fatJar") {
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
+
 
 
 
