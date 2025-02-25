@@ -35,7 +35,7 @@ fun main() {
                             body {
                                 font-family: Arial, sans-serif;
                                 text-align: center;
-                                background-color: #2ABFA4;
+                                background-color: #77CEA9;
                                 color: white;
                                 display: flex;
                                 flex-direction: column;
@@ -72,7 +72,7 @@ fun main() {
                                 font-weight: 900;
                                 margin-top: 20px;
                                 background-color: white;
-                                color: #2ABFA4;
+                                color: #77CEA9;
                                 padding: 20px 40px;
                                 border-radius: 15px;
                                 box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);

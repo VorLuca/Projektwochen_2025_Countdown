@@ -9,6 +9,14 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes(
+            "Main-Class" to "com.example.Main.kt"
+        )
+    }
+}
+
 
 dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.11")
