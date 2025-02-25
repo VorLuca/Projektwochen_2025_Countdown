@@ -59,6 +59,7 @@ tasks.register<Jar>("fatJar") {
     }
 }
 
+
 kotlin {
     jvmToolchain(17) // Hier wird die JVM Toolchain auf Java 17 gesetzt
 }
