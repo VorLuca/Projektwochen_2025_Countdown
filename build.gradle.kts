@@ -30,14 +30,14 @@ application {
     mainClass.set("org.example.MainKt")
 }
 
-// Manifest-Einträge für reguläre JARs setzen
+// Setzt das Manifest explizit für die Fat JAR
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"
     }
 }
 
-// Fat JAR Task: erstellt eine ausführbare JAR mit allen Abhängigkeiten
+// Definiert den fatJar Task: erstellt eine ausführbare JAR mit allen Abhängigkeiten
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
@@ -59,14 +59,13 @@ tasks.register<Jar>("fatJar") {
     }
 }
 
-// Kotlin-Toolchain konfigurieren
+// Kotlin-Toolchain konfigurieren (keine Notwendigkeit, languageVersion separat zu setzen)
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(17) // Hier wird die JVM Toolchain auf Java 17 gesetzt
 }
 
-// Stellt sicher, dass `fatJar` bei `build` ausgeführt wird
+// Fat JAR bei Build ausführen
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
-
 
