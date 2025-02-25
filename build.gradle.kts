@@ -36,21 +36,22 @@ tasks.register<Jar>("fatJar") {
     // Alle Dateien und Abhängigkeiten hinzufügen
     from(sourceSets.main.get().output)
 
-    // Abhängigkeiten hinzufügen
+    // Abhängigkeiten einfügen
     dependsOn(configurations.runtimeClasspath)
     from(configurations.runtimeClasspath.get().map { zipTree(it) })
 
     // Umgang mit doppelten Dateien
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // Manifest explizit setzen
+    // Manifest explizit setzen, um Main-Class zu definieren
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"  // Hier den richtigen Einstiegspunkt sicherstellen
     }
 }
 
-// Fat JAR bei jedem Build ausführen
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
+
+
 
