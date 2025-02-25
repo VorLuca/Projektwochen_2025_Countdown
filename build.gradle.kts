@@ -33,20 +33,24 @@ tasks.register<Jar>("fatJar") {
     archiveClassifier.set("")
     archiveVersion.set("")
 
-    manifest {
-        attributes["Main-Class"] = "org.example.MainKt"
-    }
-
+    // Alle Dateien und Abhängigkeiten hinzufügen
     from(sourceSets.main.get().output)
 
+    // Abhängigkeiten hinzufügen
     dependsOn(configurations.runtimeClasspath)
     from(configurations.runtimeClasspath.get().map { zipTree(it) })
 
+    // Umgang mit doppelten Dateien
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Manifest explizit setzen
+    manifest {
+        attributes["Main-Class"] = "org.example.MainKt"  // Hier den richtigen Einstiegspunkt sicherstellen
+    }
 }
 
-
-
+// Fat JAR bei jedem Build ausführen
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
+
