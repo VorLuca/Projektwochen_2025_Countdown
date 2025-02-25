@@ -47,10 +47,11 @@ tasks.shadowJar {
     mergeServiceFiles()
 
     dependencies {
-        include(dependency("io.ktor:ktor-server-netty"))
-        include(dependency("io.ktor:ktor-server-core"))
+        include(dependency("io.ktor.*:.*"))
+        include(dependency("ch.qos.logback:.*"))
     }
 }
+
 
 
 tasks.build {
