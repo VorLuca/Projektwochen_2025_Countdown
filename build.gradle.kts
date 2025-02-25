@@ -21,18 +21,29 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-application {
-    mainClass.set("org.example.MainKt")
-}
-
 tasks.test {
     useJUnitPlatform()
+}
+
+// Setzt den Einstiegspunkt für die Anwendung
+application {
+    mainClass.set("org.example.MainKt") // Hier den Einstiegspunkt angeben
+}
+
+// Setze das Manifest explizit, wenn `fatJar` erstellt wird
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "org.example.MainKt" // Den Einstiegspunkt hier sicherstellen
+    }
 }
 
 kotlin {
     jvmToolchain(17)
 }
 
+tasks.build {
+    dependsOn(tasks.named("fatJar"))
+}
 
 
 
