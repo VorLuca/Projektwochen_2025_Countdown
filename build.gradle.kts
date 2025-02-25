@@ -35,6 +35,27 @@ tasks.withType<Jar> {
     }
 }
 
+tasks.register<Jar>("fatJar") {
+    archiveBaseName.set("app")
+    archiveClassifier.set("")
+    archiveVersion.set("")
+
+    // Alle Dateien und Abhängigkeiten hinzufügen
+    from(sourceSets.main.get().output)
+
+    // Abhängigkeiten einfügen (runtimeClasspath sicherstellen)
+    dependsOn(configurations.runtimeClasspath)
+    from(configurations.runtimeClasspath.get().map { zipTree(it) })
+
+    // Umgang mit doppelten Dateien
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Manifest explizit setzen
+    manifest {
+        attributes["Main-Class"] = "org.example.MainKt"
+    }
+}
+
 kotlin {
     jvmToolchain(17)
 }
