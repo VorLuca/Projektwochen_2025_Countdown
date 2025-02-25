@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.0"
+    application
 }
 
 group = "org.example"
@@ -20,6 +21,10 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
+application {
+    mainClass.set("org.example.MainKt")
+}
+
 tasks.test {
     useJUnitPlatform()
 }
@@ -27,32 +32,6 @@ tasks.test {
 kotlin {
     jvmToolchain(17)
 }
-
-tasks.register<Jar>("fatJar") {
-    archiveBaseName.set("app")
-    archiveClassifier.set("")
-    archiveVersion.set("")
-
-    // Manifest mit Main-Class
-    manifest {
-        attributes["Main-Class"] = "org.example.MainKt"
-    }
-
-    // Alle Dateien und Abhängigkeiten einfügen
-    from(sourceSets.main.get().output)
-
-    // Abhängigkeiten einfügen (runtimeClasspath sicherstellen, dass alle Abhängigkeiten hinzugefügt werden)
-    dependsOn(configurations.runtimeClasspath)
-    from(configurations.runtimeClasspath.get().map { zipTree(it) })
-
-    // Umgang mit doppelten Dateien
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.build {
-    dependsOn(tasks.named("fatJar"))
-}
-
 
 
 
