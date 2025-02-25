@@ -45,7 +45,13 @@ tasks.shadowJar {
     archiveClassifier.set("")
     archiveVersion.set("")
     mergeServiceFiles()
+
+    dependencies {
+        include(dependency("io.ktor:ktor-server-netty"))
+        include(dependency("io.ktor:ktor-server-core"))
+    }
 }
+
 
 tasks.build {
     dependsOn(tasks.shadowJar)
