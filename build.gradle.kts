@@ -28,13 +28,6 @@ kotlin {
     jvmToolchain(17)
 }
 
-tasks.withType<Jar> {
-    // Manifest explizit setzen
-    manifest {
-        attributes["Main-Class"] = "org.example.MainKt"  // Den Einstiegspunkt auf die korrekte Klasse setzen
-    }
-}
-
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
