@@ -105,7 +105,9 @@ fun main() {
                             src = "/static/mainimage.jpeg"
                             classes = setOf("main-image")
                             id = "main-image"
+                            style = "width: 450px; height: auto;"
                         }
+
                         div {
                             id = "image-wrapper"
                         }
