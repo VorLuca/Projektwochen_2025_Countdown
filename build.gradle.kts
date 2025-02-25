@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") version "2.1.0"
-    application
 }
 
 group = "org.example"
@@ -25,47 +24,43 @@ tasks.test {
     useJUnitPlatform()
 }
 
-// Setzt den Einstiegspunkt für die Anwendung
-application {
-    mainClass.set("org.example.MainKt")
+kotlin {
+    jvmToolchain(17)
 }
 
-// Setzt das Manifest explizit für die Fat JAR
 tasks.withType<Jar> {
+    // Manifest explizit setzen
     manifest {
-        attributes["Main-Class"] = "org.example.MainKt"
+        attributes["Main-Class"] = "org.example.MainKt"  // Den Einstiegspunkt auf die korrekte Klasse setzen
     }
 }
 
-// Definiert den fatJar Task: erstellt eine ausführbare JAR mit allen Abhängigkeiten
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
     archiveVersion.set("")
 
-    // Füge die Haupt-Klassen des Projekts ein
-    from(sourceSets.main.get().output)
-
-    // Schließe alle Abhängigkeiten aus der runtimeClasspath ein
-    dependsOn(configurations.runtimeClasspath)
-    from(configurations.runtimeClasspath.get().map { zipTree(it) })
-
-    // Setze den Umgang mit doppelten Dateien (überspringe sie)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    // Manifest-Eintrag für die ausführbare JAR setzen
+    // Manifest mit Main-Class
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"
     }
+
+    // Alle Dateien und Abhängigkeiten einfügen
+    from(sourceSets.main.get().output)
+
+    // Abhängigkeiten einfügen (runtimeClasspath sicherstellen, dass alle Abhängigkeiten hinzugefügt werden)
+    dependsOn(configurations.runtimeClasspath)
+    from(configurations.runtimeClasspath.get().map { zipTree(it) })
+
+    // Umgang mit doppelten Dateien
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-
-kotlin {
-    jvmToolchain(17) // Hier wird die JVM Toolchain auf Java 17 gesetzt
-}
-
-// Fat JAR bei Build ausführen
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
+
+
+
+
 
