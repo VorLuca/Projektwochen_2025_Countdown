@@ -11,7 +11,6 @@ import io.ktor.server.http.content.*
 import kotlinx.html.*
 import java.io.File
 
-
 fun main() {
     embeddedServer(Netty, port = 8080) {
         install(DefaultHeaders)
