@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.example"
@@ -37,4 +38,15 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(17)
+}
+
+tasks.shadowJar {
+    archiveBaseName.set("app")
+    archiveClassifier.set("")
+    archiveVersion.set("")
+    mergeServiceFiles()
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
