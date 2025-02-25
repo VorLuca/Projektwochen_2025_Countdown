@@ -11,6 +11,7 @@ import io.ktor.server.http.content.*
 import kotlinx.html.*
 import java.io.File
 
+
 fun main() {
     embeddedServer(Netty, port = 8080) {
         install(DefaultHeaders)
@@ -22,7 +23,7 @@ fun main() {
             }
 
             get("/") {
-                val imageDir = File("src/main/resources/static/images")
+                val imageDir = File("src/main/resources/static/testimages")
                 val imageFiles = imageDir.listFiles()?.map { it.name } ?: emptyList()
 
                 call.respondHtml {
@@ -45,21 +46,30 @@ fun main() {
                                 position: relative;
                                 overflow: hidden;
                             }
+                            .main-image {
+                                width: 300px;
+                                height: auto;
+                                border-radius: 20px;
+                                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+                                position: relative;
+                                z-index: 10;
+                                margin-bottom: 20px;
+                            }
                             h1 {
                                 font-size: 5rem;
                                 font-weight: 1500;
                                 color: black;
-                                margin-bottom: 120px; 
+                                margin-bottom: 120px;
                                 text-transform: uppercase;
                                 font-stretch: condensed;
-                                letter-spacing: -2px; 
+                                letter-spacing: -2px;
                                 text-shadow: 0px 8px 15px rgba(0, 0, 0, 0.4);
                                 position: relative;
                                 z-index: 10;
                             }
                             #countdown {
-                                font-size: 4rem; 
-                                font-weight: 900; 
+                                font-size: 4rem;
+                                font-weight: 900;
                                 margin-top: 20px;
                                 background-color: white;
                                 color: #2ABFA4;
@@ -82,120 +92,111 @@ fun main() {
                                 transform: scale(1);
                                 box-shadow: 15px 15px 40px rgba(255, 255, 255, 0.6), 5px 5px 15px rgba(255, 255, 255, 0.3);
                             }
+                            .fading-out {
+                                opacity: 0;
+                                transform: scale(0.5);
+                                transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+                            }
                             """
                         }
                     }
                     body {
+                        img {
+                            src = "/static/mainimage.jpeg"
+                            classes = setOf("main-image")
+                            id = "main-image"
+                        }
                         div {
                             id = "image-wrapper"
                         }
-                        h1 { +"Countdown to Dockdoor Key" }
+                        h1 { id = "title"; +"Countdown to Dockdoor Key" }
                         div { id = "countdown" }
                         script {
                             unsafe {
                                 +"""
-                                let images = ${imageFiles.map { "'/static/images/$it'" }};
-                                let usedImages = [];
-                                let activeImages = [];
+                                let images = ${imageFiles.map { "'/static/testimages/$it'" }};
+                                let activeImages = new Set();
                                 let imageWrapper = document.getElementById("image-wrapper");
+                                let protectedAreas = [];
 
-                                // Geschützte Bereiche (keine Bilder in diesen Zonen)
-                                const protectedAreas = [
-                                    { x: window.innerWidth / 2 - 350, y: 20, width: 700, height: 300 }, 
-                                    { x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 100, width: 400, height: 300 } 
-                                ];
+                                function updateProtectedAreas() {
+                                    let title = document.getElementById("title");
+                                    let countdown = document.getElementById("countdown");
+                                    let mainImage = document.getElementById("main-image");
 
-                                function getRandomImage() {
-                                    if (usedImages.length === images.length) {
-                                        usedImages = []; 
+                                    if (title && countdown && mainImage) {
+                                        let titleRect = title.getBoundingClientRect();
+                                        let countdownRect = countdown.getBoundingClientRect();
+                                        let mainImageRect = mainImage.getBoundingClientRect();
+
+                                        protectedAreas = [
+                                            { x: titleRect.left, y: titleRect.top, width: titleRect.width, height: titleRect.height },
+                                            { x: countdownRect.left, y: countdownRect.top, width: countdownRect.width, height: countdownRect.height },
+                                            { x: mainImageRect.left, y: mainImageRect.top, width: mainImageRect.width, height: mainImageRect.height }
+                                        ];
                                     }
-
-                                    let availableImages = images.filter(img => !usedImages.includes(img));
-                                    let selectedImage = availableImages[Math.floor(Math.random() * availableImages.length)];
-                                    
-                                    usedImages.push(selectedImage);
-                                    return selectedImage;
                                 }
+                                
+                                window.onload = () => {
+                                    updateProtectedAreas();
+                                    window.onresize = updateProtectedAreas;
+                                };
 
-                                function isOverlapping(x, y, width, height) {
-                                    for (let area of protectedAreas) {
-                                        if (
-                                            x < area.x + area.width &&
-                                            x + width > area.x &&
-                                            y < area.y + area.height &&
-                                            y + height > area.y
-                                        ) {
-                                            return true; 
-                                        }
-                                    }
-
-                                    for (let img of activeImages) {
-                                        if (
-                                            x < img.x + img.width &&
-                                            x + width > img.x &&
-                                            y < img.y + img.height &&
-                                            y + height > img.y
-                                        ) {
-                                            return true; 
-                                        }
-                                    }
-                                    return false;
+                                function isValidSpawnPosition(x, y, width, height) {
+                                    return !protectedAreas.some(area =>
+                                        x < area.x + area.width &&
+                                        x + width > area.x &&
+                                        y < area.y + area.height &&
+                                        y + height > area.y
+                                    ) && 
+                                    !Array.from(imageWrapper.children).some(img => {
+                                        let rect = img.getBoundingClientRect();
+                                        return !(rect.right < x || rect.left > x + width || rect.bottom < y || rect.top > y + height);
+                                    });
                                 }
-
+                                
                                 function getRandomPosition(width, height) {
-                                    let x, y;
-                                    let maxWidth = window.innerWidth - width;
-                                    let maxHeight = window.innerHeight - height;
-                                    let attempts = 0;
-
+                                    let x, y, attempts = 0;
                                     do {
-                                        x = Math.random() * maxWidth;
-                                        y = Math.random() * maxHeight;
+                                        x = Math.random() * (window.innerWidth - width);
+                                        y = Math.random() * (window.innerHeight - height);
                                         attempts++;
-                                        if (attempts > 50) return null; 
-                                    } while (isOverlapping(x, y, width, height));
-
+                                        if (attempts > 50) return null;
+                                    } while (!isValidSpawnPosition(x, y, width, height));
                                     return { x, y };
                                 }
 
-                                function getRandomSize() {
-                                    let size = Math.floor(Math.random() * 100) + 150; 
-                                    return { width: size, height: size };
-                                }
-
                                 function spawnImage() {
+                                    let availableImages = images.filter(img => !activeImages.has(img));
+                                    if (availableImages.length === 0) return;
+
+                                    let imgSrc = availableImages[Math.floor(Math.random() * availableImages.length)];
                                     let img = document.createElement("img");
-                                    img.src = getRandomImage();
+                                    img.src = imgSrc;
                                     img.classList.add("image-container");
+                                    activeImages.add(imgSrc);
+                                    
+                                    let size = Math.floor(Math.random() * 100) + 150;
+                                    let position = getRandomPosition(size, size);
+                                    if (!position) return;
 
-                                    let { width, height } = getRandomSize();
-                                    let position = getRandomPosition(width, height);
-                                    if (!position) return; 
-
-                                    let { x, y } = position;
-
-                                    img.style.left = x + "px";
-                                    img.style.top = y + "px";
-                                    img.style.width = width + "px";
-                                    img.style.height = height + "px";
-
+                                    img.style.left = position.x + "px";
+                                    img.style.top = position.y + "px";
+                                    img.style.width = size + "px";
+                                    img.style.height = size + "px";
                                     imageWrapper.appendChild(img);
+
                                     setTimeout(() => img.classList.add("visible"), 100);
 
-                                    let displayTime = Math.floor(Math.random() * 5000) + 2000;
-                                    activeImages.push({ img, x, y, width, height });
-
-                                    setTimeout(() => removeImage(img), displayTime);
-                                }
-
-                                function removeImage(img) {
-                                    img.classList.remove("visible");
                                     setTimeout(() => {
-                                        activeImages = activeImages.filter(i => i.img !== img);
-                                        img.remove();
-                                    }, 1000);
+                                        img.classList.add("fading-out");
+                                        setTimeout(() => {
+                                            img.remove();
+                                            activeImages.delete(imgSrc);
+                                        }, 1000);
+                                    }, Math.random() * 5000 + 2000);
                                 }
-
+                                
                                 function updateCountdown() {
                                     const targetDate = new Date('March 14, 2025 10:00:00').getTime();
                                     const now = new Date().getTime();
@@ -214,13 +215,7 @@ fun main() {
 
                                 setInterval(updateCountdown, 1000);
                                 updateCountdown();
-
-                                function startSpawning() {
-                                    spawnImage();
-                                    setInterval(spawnImage, 3000);
-                                }
-
-                                startSpawning();
+                                setInterval(spawnImage, 3000);
                                 """
                             }
                         }
