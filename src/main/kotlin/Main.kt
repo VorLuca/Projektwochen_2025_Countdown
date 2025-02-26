@@ -11,20 +11,20 @@ import io.ktor.server.http.content.*
 import kotlinx.html.*
 import java.io.File
 
-val port = System.getenv("PORT")?.toIntOrNull() ?: 8080
-
 fun main() {
+    val port = System.getenv("PORT")?.toIntOrNull() ?: 8080  // ✅ Port aus Railway-Umgebungsvariable lesen
+
     embeddedServer(Netty, port = port) {
         install(DefaultHeaders)
         install(CallLogging)
 
         routing {
             static("/static") {
-                resources("static")
+                files("public") // ✅ Statische Dateien aus "public/" bereitstellen
             }
 
             get("/") {
-                val imageDir = File("src/main/resources/static/testimages")
+                val imageDir = File("public/testimages") // ✅ Bilder aus "public/testimages" laden
                 val imageFiles = imageDir.listFiles()?.map { it.name } ?: emptyList()
 
                 call.respondHtml {
