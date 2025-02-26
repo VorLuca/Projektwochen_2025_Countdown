@@ -11,14 +11,15 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib") // ✅ Fügt die Kotlin-Standardbibliothek hinzu
+    implementation("org.jetbrains.kotlin:kotlin-stdlib") // ✅ Stellt sicher, dass die Kotlin-Standardbibliothek enthalten ist
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.ktor:ktor-server-core:2.3.3")
-    implementation("io.ktor:ktor-server-netty:2.3.3") // Ktor Netty Engine
+    implementation("io.ktor:ktor-server-netty:2.3.3")
     implementation("io.ktor:ktor-server-html-builder:2.3.3")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.1")
     implementation("io.ktor:ktor-server-call-logging-jvm:2.3.3")
     implementation("io.ktor:ktor-server-default-headers-jvm:2.3.3")
+
     testImplementation(kotlin("test"))
 }
 
@@ -34,13 +35,7 @@ kotlin {
     jvmToolchain(17)
 }
 
-// Setzt das Manifest explizit für die Fat JAR
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "org.example.MainKt"
-    }
-}
-
+// ✅ Fat JAR erstellen mit allen Abhängigkeiten
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
@@ -62,7 +57,7 @@ tasks.register<Jar>("fatJar") {
     }
 }
 
-
+// Standard-Build Task setzt `fatJar` als Abhängigkeit
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
