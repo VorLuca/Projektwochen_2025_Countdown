@@ -36,7 +36,7 @@ fun main() {
                             body {
                                 font-family: Arial, sans-serif;
                                 text-align: center;
-                                background-color: #067f38;
+                                background-color: #0d1b14;
                                 color: white;
                                 display: flex;
                                 flex-direction: column;
@@ -51,29 +51,30 @@ fun main() {
                                 width: 300px;
                                 height: auto;
                                 border-radius: 20px;
-                                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+                                box-shadow: 0px 8px 15px rgba(255, 255, 255, 0.3);
                                 position: relative;
                                 z-index: 10;
                                 margin-bottom: 20px;
                             }
                             h1 {
-                                font-size: 5rem;
-                                font-weight: 1500;
-                                color: black;
-                                margin-bottom: 120px;
+                                background-color: #03582b;
+                                color: white;
+                                padding: 20px 40px;
+                                border-radius: 15px;
+                                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
                                 text-transform: uppercase;
-                                font-stretch: condensed;
+                                font-size: 5rem;
+                                font-weight: bold;
                                 letter-spacing: -2px;
-                                text-shadow: 0px 8px 15px rgba(0, 0, 0, 0.4);
-                                position: relative;
-                                z-index: 10;
+                                text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
                             }
+                          
                             #countdown {
                                 font-size: 4rem;
                                 font-weight: 900;
                                 margin-top: 20px;
-                                background-color: white;
-                                color: #067f38;
+                                background-color: #f4f8f3;
+                                color: #034d22;
                                 padding: 20px 40px;
                                 border-radius: 15px;
                                 box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
