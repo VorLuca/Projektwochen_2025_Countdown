@@ -1,4 +1,4 @@
-# 1️⃣ Basis-Image mit JDK 17
+# 1️⃣ Basis-Image mit OpenJDK 17
 FROM openjdk:17-jdk-slim AS build
 
 # 2️⃣ Setze das Arbeitsverzeichnis
@@ -26,5 +26,8 @@ WORKDIR /app
 # 6️⃣ Kopiere das gebaute JAR aus dem vorherigen Schritt
 COPY --from=build /app/build/libs/*.jar app.jar
 
-# 7️⃣ Starte die Anwendung
+# 7️⃣ Kopiere die statischen Dateien (Bilder, CSS, JS)
+COPY public /app/public
+
+# 8️⃣ Starte die Anwendung
 CMD ["java", "-jar", "app.jar"]
