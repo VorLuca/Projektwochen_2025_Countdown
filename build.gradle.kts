@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib") // ✅ Stellt sicher, dass Kotlin enthalten ist
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.ktor:ktor-server-core:2.3.3")
     implementation("io.ktor:ktor-server-netty:2.3.3")
@@ -42,7 +42,7 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-// ✅ Fat JAR erstellen mit allen Abhängigkeiten
+// ✅ Richtiges Fat JAR mit ALLE Abhängigkeiten erzeugen
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
@@ -53,8 +53,7 @@ tasks.register<Jar>("fatJar") {
     dependsOn(configurations.runtimeClasspath)
     from({
         configurations.runtimeClasspath.get()
-            .filter { it.name.endsWith("jar") }
-            .map { zipTree(it) }
+            .map { if (it.isDirectory) it else zipTree(it) }
     })
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
