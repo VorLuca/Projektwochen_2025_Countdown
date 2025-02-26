@@ -36,7 +36,7 @@ fun main() {
                             body {
                                 font-family: Arial, sans-serif;
                                 text-align: center;
-                                background-color: #497756;
+                                background-color: #067f38;
                                 color: white;
                                 display: flex;
                                 flex-direction: column;
@@ -73,7 +73,7 @@ fun main() {
                                 font-weight: 900;
                                 margin-top: 20px;
                                 background-color: white;
-                                color: #497756;
+                                color: #067f38;
                                 padding: 20px 40px;
                                 border-radius: 15px;
                                 box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
@@ -103,7 +103,7 @@ fun main() {
                     }
                     body {
                         img {
-                            src = "/static/mainimage.jpeg"
+                            src = "/static/mainImage.png"
                             classes = setOf("main-image")
                             id = "main-image"
                             style = "width: 450px; height: auto;"
@@ -112,7 +112,7 @@ fun main() {
                         div {
                             id = "image-wrapper"
                         }
-                        h1 { id = "title"; +"Countdown to Dockdoor Key" }
+                        h1 { id = "title"; +"Countdown to PRODUKTNAME" }
                         div { id = "countdown" }
                         script {
                             unsafe {
