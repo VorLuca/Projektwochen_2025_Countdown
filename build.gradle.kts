@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.0"
     application
-    id("com.github.johnrengelman.shadow") version "8.1.1" // ✅ Shadow JAR-Plugin für richtige JARs
 }
 
 group = "org.example"
@@ -43,18 +42,27 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-// ✅ Shadow JAR erstellen
-tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+// ✅ Richtiges Fat JAR mit ALLE Abhängigkeiten erzeugen
+tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
     archiveVersion.set("")
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get()
+            .map { if (it.isDirectory) it else zipTree(it) }
+    })
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"
     }
 }
 
-// ✅ Standard-Build Task setzt `shadowJar` als Abhängigkeit
 tasks.build {
-    dependsOn(tasks.named("shadowJar"))
+    dependsOn(tasks.named("fatJar"))
 }
