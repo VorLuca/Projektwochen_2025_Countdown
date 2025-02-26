@@ -16,7 +16,7 @@ RUN ./gradlew dependencies --no-daemon
 
 # 4️⃣ Kopiere den gesamten Quellcode & baue das JAR
 COPY . .
-RUN ./gradlew clean shadowJar --no-daemon
+RUN ./gradlew clean fatJar --no-daemon
 
 # 5️⃣ Erstelle das finale Laufzeit-Image
 FROM openjdk:17-jdk-slim
