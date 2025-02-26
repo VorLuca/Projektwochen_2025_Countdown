@@ -37,31 +37,31 @@ kotlin {
 // Setzt das Manifest explizit für die Fat JAR
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "org.example.MainKt" // Den Einstiegspunkt auf die korrekte Klasse setzen
+        attributes["Main-Class"] = "org.example.MainKt"
     }
 }
 
-// Fat JAR erstellen
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
     archiveVersion.set("")
 
-    // Alle Dateien und Abhängigkeiten einfügen
     from(sourceSets.main.get().output)
 
-    // Abhängigkeiten aus runtimeClasspath einfügen
     dependsOn(configurations.runtimeClasspath)
-    from(configurations.runtimeClasspath.get().map { zipTree(it) })
+    from({
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith("jar") }
+            .map { zipTree(it) }
+    })
 
-    // Umgang mit doppelten Dateien
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // Manifest explizit setzen
     manifest {
         attributes["Main-Class"] = "org.example.MainKt"
     }
 }
+
 
 tasks.build {
     dependsOn(tasks.named("fatJar"))
