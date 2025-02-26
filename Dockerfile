@@ -1,7 +1,6 @@
 # 1️⃣ Basis-Image mit OpenJDK 17
 FROM openjdk:17-jdk-slim AS build
 
-# 2️⃣ Setze das Arbeitsverzeichnis
 WORKDIR /app
 
 # 3️⃣ Kopiere die Gradle-Dateien & lade Abhängigkeiten (Caching optimiert)
