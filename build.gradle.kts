@@ -63,7 +63,6 @@ tasks.register<Jar>("fatJar") {
     }
 }
 
-// Standard-Build Task setzt `fatJar` als Abhängigkeit
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
