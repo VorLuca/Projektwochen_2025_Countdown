@@ -30,7 +30,7 @@ fun main() {
                 call.respondHtml {
                     head {
                         meta { charset = "UTF-8" }
-                        title("Countdown to Dockdoor Key")
+                        title("Countdown to launch")
                         style {
                             +"""
                             body {
@@ -86,12 +86,12 @@ fun main() {
                                 opacity: 0;
                                 transform: scale(0.5);
                                 transition: opacity 1s ease-in-out, transform 1s ease-in-out, box-shadow 1.5s ease-in-out;
-                                box-shadow: 5px 5px 10px rgba(255, 255, 255, 0.2);
+                                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
                             }
                             .visible {
                                 opacity: 1;
                                 transform: scale(1);
-                                box-shadow: 15px 15px 40px rgba(255, 255, 255, 0.6), 5px 5px 15px rgba(255, 255, 255, 0.3);
+                                box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.6), 5px 5px 15px rgba(255, 255, 255, 0.3);
                             }
                             .fading-out {
                                 opacity: 0;
@@ -112,7 +112,7 @@ fun main() {
                         div {
                             id = "image-wrapper"
                         }
-                        h1 { id = "title"; +"Countdown to PRODUKTNAME" }
+                        h1 { id = "title"; +"Countdown to launch" }
                         div { id = "countdown" }
                         script {
                             unsafe {
