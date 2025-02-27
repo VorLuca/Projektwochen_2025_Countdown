@@ -75,7 +75,7 @@ function getRandomPosition(width, height) {
     return { x, y };
 }
 
-let animationStarted = false; // Animation nur einmal starten
+let animationStarted = false;
 
 function updateCountdown() {
     const targetDate = new Date('March 14, 2025 14:00:00').getTime();
