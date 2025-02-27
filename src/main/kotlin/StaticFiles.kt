@@ -7,4 +7,7 @@ fun Routing.configureStaticFiles() {
     static("/static") {
         files("public")
     }
+    static("/videos") {
+        files("public/videos")
+    }
 }

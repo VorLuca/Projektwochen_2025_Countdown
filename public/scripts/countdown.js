@@ -33,7 +33,7 @@ function updateProtectedAreas() {
 
 
 function isValidSpawnPosition(x, y, width, height) {
-    // Aktuelle geschützte Bereiche nochmal updaten (z.B. nach Resize)
+
     updateProtectedAreas();
 
     return !protectedAreas.some(area =>
@@ -54,12 +54,11 @@ function getRandomPosition(width, height) {
         y = Math.random() * (window.innerHeight - height);
         attempts++;
 
-        if (attempts > 50) return null; // Sicherheitsabbruch nach 50 Versuchen
+        if (attempts > 50) return null;
 
-        // **Hier nochmal live checken, ob es im Countdown-Bereich ist**
         let countdown = document.getElementById("countdown");
         let countdownRect = countdown.getBoundingClientRect();
-        let padding = 25; // Abstand halten
+        let padding = 25;
 
         let inCountdownArea = (
             x + width > countdownRect.left - padding &&
@@ -68,7 +67,7 @@ function getRandomPosition(width, height) {
             y < countdownRect.bottom + padding
         );
 
-        if (inCountdownArea) continue; // Falls zu nah am Countdown: neue Position suchen
+        if (inCountdownArea) continue;
 
     } while (!isValidSpawnPosition(x, y, width, height));
 
@@ -76,6 +75,17 @@ function getRandomPosition(width, height) {
 }
 
 let animationStarted = false;
+
+const backgroundOverlay = document.createElement("div");
+backgroundOverlay.style.position = "fixed";
+backgroundOverlay.style.top = "0";
+backgroundOverlay.style.left = "0";
+backgroundOverlay.style.width = "100%";
+backgroundOverlay.style.height = "100%";
+backgroundOverlay.style.backgroundColor = "rgba(0, 0, 0, 0)";
+backgroundOverlay.style.zIndex = "-1";
+backgroundOverlay.style.transition = "background-color 1s linear";
+document.body.appendChild(backgroundOverlay);
 
 function updateCountdown() {
     const targetDate = new Date('March 14, 2025 14:00:00').getTime();
@@ -100,48 +110,64 @@ function updateCountdown() {
 
         countdownElement.innerHTML = countdownText.join(" ");
 
-        if (timeLeft <= 20000 && !animationStarted) {
-            animationStarted = true; // Animation nur einmal starten
+        if (timeLeft <= 27000) {
             allowSpawning = false;
-            if (mainImage) {
-                mainImage.style.transition = 'opacity 3s ease-out';
-                mainImage.style.opacity = '0';
-                setTimeout(() => {
-                    animateTitleUp(titleElement);
-                }, 3000);
-            }
         }
 
         if (timeLeft <= 10000) {
-            let remainingSeconds = Math.ceil(timeLeft / 1000);
-            let scaleFactor = 1 + (10 - remainingSeconds) * 0.05;
-            let shadowIntensity = (10 - remainingSeconds) * 5;
+            let progress = (10000 - timeLeft) / 10000;
 
-            countdownElement.style.fontSize = `${4 * scaleFactor}rem`;
-            countdownElement.style.textShadow = `0px 0px ${shadowIntensity}px rgba(255, 255, 255, 0.8)`;
+            countdownElement.style.transform = `scale(${1 + progress})`;
+
+            backgroundOverlay.style.backgroundColor = `rgba(12, 12, 12, ${0.8 * progress})`;
+        }
+
+        if (timeLeft <= 20000 && !animationStarted) {
+            animationStarted = true;
+
+            if (mainImage) {
+                mainImage.style.transition = 'opacity 2.5s ease-out';
+                mainImage.style.opacity = '0';
+
+                setTimeout(() => {
+                    moveElementsToPositions(titleElement, countdownElement, 3000);
+                }, 2500);
+            }
         }
     } else {
         countdownElement.innerHTML = "Time's up!";
-        clearInterval(countdownInterval); // Stoppt das Intervall, wenn die Zeit abgelaufen ist
+        clearInterval(countdownInterval);
+        setTimeout(() => {
+            window.location.href = "/werbevideo";
+        }, 1000);
     }
 }
 
-function animateTitleUp(element) {
+function moveElementsToPositions(titleElement, countdownElement, duration) {
     let start = null;
-    const startTop = element.offsetTop; // **Ermittle die aktuelle Position des Elements**
-    const endTop = 10; // Endposition in px
-    const duration = 5000; // Animationszeit in ms
+
+    let startTopTitle = titleElement.getBoundingClientRect().top;
+    let startTopCountdown = countdownElement.getBoundingClientRect().top;
+
+    let titleMoveDistance = -(startTopTitle - window.innerHeight * 0.15);
+    let countdownMoveDistance = -(startTopCountdown - window.innerHeight * 0.5);
+
+    titleElement.style.position = "relative";
+    countdownElement.style.position = "relative";
+
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
 
     function step(timestamp) {
         if (!start) start = timestamp;
         let progress = (timestamp - start) / duration;
         if (progress > 1) progress = 1;
 
-        let currentTop = startTop + (endTop - startTop) * progress;
-        element.style.position = 'absolute';
-        element.style.top = `${currentTop}px`;
-        element.style.left = '50%';
-        element.style.transform = 'translateX(-50%)';
+        let easedProgress = easeInOutQuad(progress);
+
+        titleElement.style.transform = `translateY(${titleMoveDistance * easedProgress}px)`;
+        countdownElement.style.transform = `translateY(${countdownMoveDistance * easedProgress}px)`;
 
         if (progress < 1) {
             requestAnimationFrame(step);
@@ -151,11 +177,8 @@ function animateTitleUp(element) {
     requestAnimationFrame(step);
 }
 
-
-// Startet das Countdown-Intervall
 const countdownInterval = setInterval(updateCountdown, 1000);
 
-// **Bild spawnen**
 function spawnImage() {
     if (!allowSpawning) return;
 
@@ -168,14 +191,15 @@ function spawnImage() {
     img.classList.add("image-container");
     activeImages.add(imgSrc);
 
-    let size = Math.floor(Math.random() * 100) + 150;
-    let position = getRandomPosition(size, size);
+    let width = Math.floor(Math.random() * 100) + 150;
+    let height = Math.round(width * (2160 / 3840));
+    let position = getRandomPosition(width, height);
     if (!position) return;
 
     img.style.left = `${position.x}px`;
     img.style.top = `${position.y}px`;
-    img.style.width = `${size}px`;
-    img.style.height = `${size}px`;
+    img.style.width = `${width}px`;
+    img.style.height = `${height}px`;
     imageWrapper.appendChild(img);
 
     setTimeout(() => img.classList.add("visible"), 100);
