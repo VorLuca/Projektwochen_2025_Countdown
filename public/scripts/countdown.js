@@ -88,7 +88,7 @@ backgroundOverlay.style.transition = "background-color 1s linear";
 document.body.appendChild(backgroundOverlay);
 
 function updateCountdown() {
-    const targetDate = new Date('February 27, 2025 11:34:30').getTime();
+    const targetDate = new Date('February 27, 2025 11:54:30').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -137,6 +137,9 @@ function updateCountdown() {
     } else {
         countdownElement.innerHTML = "Time's up!";
         clearInterval(countdownInterval);
+        setTimeout(() => {
+            window.location.href = "/werbevideo";
+        }, 1000);
     }
 }
 
