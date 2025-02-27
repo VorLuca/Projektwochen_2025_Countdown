@@ -28,7 +28,7 @@ tasks.test {
 }
 
 application {
-    mainClass.set("org.example.Application")
+    mainClass.set("org.example.ApplicationKt")
 }
 
 kotlin {
@@ -38,7 +38,7 @@ kotlin {
 // ✅ Manifest für ALLE JAR-Dateien setzen
 tasks.withType<Jar>().configureEach {
     manifest {
-        attributes["Main-Class"] = "org.example.Application"
+        attributes["Main-Class"] = "org.example.ApplicationKt"
     }
 }
 
@@ -59,7 +59,7 @@ tasks.register<Jar>("fatJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
-        attributes["Main-Class"] = "org.example.Application"
+        attributes["Main-Class"] = "org.example.ApplicationKt"
     }
 }
 
