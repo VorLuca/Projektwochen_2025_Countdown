@@ -28,7 +28,7 @@ tasks.test {
 }
 
 application {
-    mainClass.set("org.example.MainKt")
+    mainClass.set("org.example.ApplicationKt")
 }
 
 kotlin {
@@ -38,7 +38,7 @@ kotlin {
 // ✅ Manifest für ALLE JAR-Dateien setzen
 tasks.withType<Jar>().configureEach {
     manifest {
-        attributes["Main-Class"] = "org.example.MainKt"
+        attributes["Main-Class"] = "org.example.ApplicationKt"
     }
 }
 

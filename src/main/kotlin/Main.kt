@@ -20,7 +20,7 @@ fun main() {
 
         routing {
             static("/static") {
-                files("public") // ✅ Statische Dateien aus "public/" bereitstellen
+                files("public")
             }
 
             get("/") {
