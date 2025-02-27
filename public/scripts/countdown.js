@@ -88,7 +88,7 @@ backgroundOverlay.style.transition = "background-color 1s linear";
 document.body.appendChild(backgroundOverlay);
 
 function updateCountdown() {
-    const targetDate = new Date('March 14, 2025 14:00:00').getTime();
+    const targetDate = new Date('February 27, 2025 14:25:30').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -110,7 +110,7 @@ function updateCountdown() {
 
         countdownElement.innerHTML = countdownText.join(" ");
 
-        if (timeLeft <= 27000) {
+        if (timeLeft <= 25000) {
             allowSpawning = false;
         }
 
@@ -118,11 +118,13 @@ function updateCountdown() {
             let progress = (10000 - timeLeft) / 10000;
 
             countdownElement.style.transform = `scale(${1 + progress})`;
+            countdownElement.style.textShadow = `0 0 ${progress * 30}px rgba(255, 255, 255, ${progress})`;
 
             backgroundOverlay.style.backgroundColor = `rgba(12, 12, 12, ${0.8 * progress})`;
         }
 
-        if (timeLeft <= 20000 && !animationStarted) {
+
+        if (timeLeft <= 18000 && !animationStarted) {
             animationStarted = true;
 
             if (mainImage) {
@@ -137,9 +139,18 @@ function updateCountdown() {
     } else {
         countdownElement.innerHTML = "Time's up!";
         clearInterval(countdownInterval);
+
+        // Zoom-in-Effekt auf den Countdown
+        countdownElement.style.transition = "transform 0.8s ease-in-out";
+        countdownElement.style.transform = "scale(10)";
+
+        // Die gesamte Seite langsam ausblenden
+        document.body.style.transition = "opacity 0.8s ease-in-out";
+        document.body.style.opacity = "0";
+
         setTimeout(() => {
             window.location.href = "/werbevideo";
-        }, 1000);
+        }, 800);
     }
 }
 
