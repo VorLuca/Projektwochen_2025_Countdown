@@ -78,7 +78,7 @@ function getRandomPosition(width, height) {
 let animationStarted = false;
 
 function updateCountdown() {
-    const targetDate = new Date('February 27, 2025 11:17:20').getTime();
+    const targetDate = new Date('February 27, 2025 11:22:20').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -124,21 +124,24 @@ function updateCountdown() {
     }
 }
 
-// **Titel springt noch weiter nach oben, Countdown bleibt mittig**
+// **Elemente starten von ihrer aktuellen Position und bewegen sich nach oben**
 function moveElementsToPositions(titleElement, countdownElement, duration) {
     let start = null;
 
-    // Aktuelle Startpositionen
-    let startTopTitle = titleElement.offsetTop;
-    let startTopCountdown = countdownElement.offsetTop;
+    // Aktuelle Positionen holen
+    let startTopTitle = titleElement.getBoundingClientRect().top;
+    let startTopCountdown = countdownElement.getBoundingClientRect().top;
 
-    // Zielpositionen
-    let endTopTitle = window.innerHeight * 0.15; // 15% der Bildschirmhöhe (noch weiter oben)
-    let endTopCountdown = window.innerHeight * 0.5; // 50% der Bildschirmhöhe (exakte Mitte)
+    // Zielpositionen berechnen (negativ für nach oben Bewegung)
+    let titleMoveDistance = -(startTopTitle - window.innerHeight * 0.15); // H1 geht nach oben
+    let countdownMoveDistance = -(startTopCountdown - window.innerHeight * 0.5); // Countdown in die Mitte
+
+    // Verhindert Sprünge beim Start
+    titleElement.style.position = "relative";
+    countdownElement.style.position = "relative";
 
     function easeInOutQuad(t) {
         return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        // Anfangs langsam, dann beschleunigt, dann wieder langsamer
     }
 
     function step(timestamp) {
@@ -148,22 +151,9 @@ function moveElementsToPositions(titleElement, countdownElement, duration) {
 
         let easedProgress = easeInOutQuad(progress);
 
-        // Neue Positionen berechnen
-        let newTopTitle = startTopTitle + (endTopTitle - startTopTitle) * easedProgress;
-        let newTopCountdown = startTopCountdown + (endTopCountdown - startTopCountdown) * easedProgress;
-
-        // Setze neue Positionen
-        titleElement.style.position = 'absolute';
-        titleElement.style.top = `${newTopTitle}px`;
-        titleElement.style.left = '50%';
-        titleElement.style.transform = 'translateX(-50%)';
-        titleElement.style.whiteSpace = 'nowrap';
-
-        countdownElement.style.position = 'absolute';
-        countdownElement.style.top = `${newTopCountdown}px`;
-        countdownElement.style.left = '50%';
-        countdownElement.style.transform = 'translateX(-50%)';
-        countdownElement.style.whiteSpace = 'nowrap';
+        // Bewegung nach oben (negative Werte)
+        titleElement.style.transform = `translateY(${titleMoveDistance * easedProgress}px)`;
+        countdownElement.style.transform = `translateY(${countdownMoveDistance * easedProgress}px)`;
 
         if (progress < 1) {
             requestAnimationFrame(step);
