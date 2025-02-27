@@ -66,3 +66,4 @@ tasks.register<Jar>("fatJar") {
 tasks.build {
     dependsOn(tasks.named("fatJar"))
 }
+
