@@ -68,7 +68,7 @@ function getRandomPosition(width, height) {
             y < countdownRect.bottom + padding
         );
 
-        if (inCountdownArea) continue; // Falls zu nah am Countdown: neue Position suchen
+        if (inCountdownArea) continue;
 
     } while (!isValidSpawnPosition(x, y, width, height));
 
@@ -78,7 +78,7 @@ function getRandomPosition(width, height) {
 let animationStarted = false;
 
 function updateCountdown() {
-    const targetDate = new Date('March 14, 2025 14:00:00').getTime();
+    const targetDate = new Date('February 27, 2025 11:17:20').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -100,48 +100,70 @@ function updateCountdown() {
 
         countdownElement.innerHTML = countdownText.join(" ");
 
-        if (timeLeft <= 20000 && !animationStarted) {
-            animationStarted = true; // Animation nur einmal starten
+        if (timeLeft <= 27000) {
             allowSpawning = false;
-            if (mainImage) {
-                mainImage.style.transition = 'opacity 3s ease-out';
-                mainImage.style.opacity = '0';
-                setTimeout(() => {
-                    animateTitleUp(titleElement);
-                }, 3000);
-            }
         }
 
-        if (timeLeft <= 10000) {
-            let remainingSeconds = Math.ceil(timeLeft / 1000);
-            let scaleFactor = 1 + (10 - remainingSeconds) * 0.05;
-            let shadowIntensity = (10 - remainingSeconds) * 5;
+        // Starte Animation nur einmal
+        if (timeLeft <= 20000 && !animationStarted) {
+            animationStarted = true;
 
-            countdownElement.style.fontSize = `${4 * scaleFactor}rem`;
-            countdownElement.style.textShadow = `0px 0px ${shadowIntensity}px rgba(255, 255, 255, 0.8)`;
+            if (mainImage) {
+                mainImage.style.transition = 'opacity 2.5s ease-out';
+                mainImage.style.opacity = '0';
+
+                // Starte Titel- und Countdown-Animation nach 2.5s
+                setTimeout(() => {
+                    moveElementsToPositions(titleElement, countdownElement, 3000);
+                }, 2500);
+            }
         }
     } else {
         countdownElement.innerHTML = "Time's up!";
-        clearInterval(countdownInterval); // Stoppt das Intervall, wenn die Zeit abgelaufen ist
+        clearInterval(countdownInterval);
     }
 }
 
-function animateTitleUp(element) {
+// **Titel springt noch weiter nach oben, Countdown bleibt mittig**
+function moveElementsToPositions(titleElement, countdownElement, duration) {
     let start = null;
-    const startTop = element.offsetTop; // **Ermittle die aktuelle Position des Elements**
-    const endTop = 10; // Endposition in px
-    const duration = 5000; // Animationszeit in ms
+
+    // Aktuelle Startpositionen
+    let startTopTitle = titleElement.offsetTop;
+    let startTopCountdown = countdownElement.offsetTop;
+
+    // Zielpositionen
+    let endTopTitle = window.innerHeight * 0.15; // 15% der Bildschirmhöhe (noch weiter oben)
+    let endTopCountdown = window.innerHeight * 0.5; // 50% der Bildschirmhöhe (exakte Mitte)
+
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        // Anfangs langsam, dann beschleunigt, dann wieder langsamer
+    }
 
     function step(timestamp) {
         if (!start) start = timestamp;
         let progress = (timestamp - start) / duration;
         if (progress > 1) progress = 1;
 
-        let currentTop = startTop + (endTop - startTop) * progress;
-        element.style.position = 'absolute';
-        element.style.top = `${currentTop}px`;
-        element.style.left = '50%';
-        element.style.transform = 'translateX(-50%)';
+        let easedProgress = easeInOutQuad(progress);
+
+        // Neue Positionen berechnen
+        let newTopTitle = startTopTitle + (endTopTitle - startTopTitle) * easedProgress;
+        let newTopCountdown = startTopCountdown + (endTopCountdown - startTopCountdown) * easedProgress;
+
+        // Setze neue Positionen
+        titleElement.style.position = 'absolute';
+        titleElement.style.top = `${newTopTitle}px`;
+        titleElement.style.left = '50%';
+        titleElement.style.transform = 'translateX(-50%)';
+        titleElement.style.whiteSpace = 'nowrap';
+
+        countdownElement.style.position = 'absolute';
+        countdownElement.style.top = `${newTopCountdown}px`;
+        countdownElement.style.left = '50%';
+        countdownElement.style.transform = 'translateX(-50%)';
+        countdownElement.style.whiteSpace = 'nowrap';
 
         if (progress < 1) {
             requestAnimationFrame(step);
@@ -150,7 +172,6 @@ function animateTitleUp(element) {
 
     requestAnimationFrame(step);
 }
-
 
 // Startet das Countdown-Intervall
 const countdownInterval = setInterval(updateCountdown, 1000);
