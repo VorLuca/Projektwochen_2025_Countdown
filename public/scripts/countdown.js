@@ -21,7 +21,7 @@ function updateProtectedAreas() {
         let titleRect = title.getBoundingClientRect();
         let countdownRect = countdown.getBoundingClientRect();
         let mainImageRect = mainImage.getBoundingClientRect();
-        let padding = 25; // Extra Abstand um die geschützten Bereiche
+        let padding = 25;
 
         protectedAreas = [
             { x: titleRect.left - padding, y: titleRect.top - padding, width: titleRect.width + 2 * padding, height: titleRect.height + 2 * padding },
