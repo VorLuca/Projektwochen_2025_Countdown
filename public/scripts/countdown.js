@@ -33,7 +33,7 @@ function updateProtectedAreas() {
 
 
 function isValidSpawnPosition(x, y, width, height) {
-    // Aktuelle geschützte Bereiche nochmal updaten (z.B. nach Resize)
+
     updateProtectedAreas();
 
     return !protectedAreas.some(area =>
@@ -54,12 +54,11 @@ function getRandomPosition(width, height) {
         y = Math.random() * (window.innerHeight - height);
         attempts++;
 
-        if (attempts > 50) return null; // Sicherheitsabbruch nach 50 Versuchen
+        if (attempts > 50) return null;
 
-        // **Hier nochmal live checken, ob es im Countdown-Bereich ist**
         let countdown = document.getElementById("countdown");
         let countdownRect = countdown.getBoundingClientRect();
-        let padding = 25; // Abstand halten
+        let padding = 25;
 
         let inCountdownArea = (
             x + width > countdownRect.left - padding &&
@@ -77,8 +76,19 @@ function getRandomPosition(width, height) {
 
 let animationStarted = false;
 
+const backgroundOverlay = document.createElement("div");
+backgroundOverlay.style.position = "fixed";
+backgroundOverlay.style.top = "0";
+backgroundOverlay.style.left = "0";
+backgroundOverlay.style.width = "100%";
+backgroundOverlay.style.height = "100%";
+backgroundOverlay.style.backgroundColor = "rgba(0, 0, 0, 0)";
+backgroundOverlay.style.zIndex = "-1";
+backgroundOverlay.style.transition = "background-color 1s linear";
+document.body.appendChild(backgroundOverlay);
+
 function updateCountdown() {
-    const targetDate = new Date('February 27, 2025 11:22:20').getTime();
+    const targetDate = new Date('February 27, 2025 11:34:30').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -104,7 +114,14 @@ function updateCountdown() {
             allowSpawning = false;
         }
 
-        // Starte Animation nur einmal
+        if (timeLeft <= 10000) {
+            let progress = (10000 - timeLeft) / 10000;
+
+            countdownElement.style.transform = `scale(${1 + progress})`;
+
+            backgroundOverlay.style.backgroundColor = `rgba(12, 12, 12, ${0.8 * progress})`;
+        }
+
         if (timeLeft <= 20000 && !animationStarted) {
             animationStarted = true;
 
@@ -112,7 +129,6 @@ function updateCountdown() {
                 mainImage.style.transition = 'opacity 2.5s ease-out';
                 mainImage.style.opacity = '0';
 
-                // Starte Titel- und Countdown-Animation nach 2.5s
                 setTimeout(() => {
                     moveElementsToPositions(titleElement, countdownElement, 3000);
                 }, 2500);
@@ -124,19 +140,15 @@ function updateCountdown() {
     }
 }
 
-// **Elemente starten von ihrer aktuellen Position und bewegen sich nach oben**
 function moveElementsToPositions(titleElement, countdownElement, duration) {
     let start = null;
 
-    // Aktuelle Positionen holen
     let startTopTitle = titleElement.getBoundingClientRect().top;
     let startTopCountdown = countdownElement.getBoundingClientRect().top;
 
-    // Zielpositionen berechnen (negativ für nach oben Bewegung)
-    let titleMoveDistance = -(startTopTitle - window.innerHeight * 0.15); // H1 geht nach oben
-    let countdownMoveDistance = -(startTopCountdown - window.innerHeight * 0.5); // Countdown in die Mitte
+    let titleMoveDistance = -(startTopTitle - window.innerHeight * 0.15);
+    let countdownMoveDistance = -(startTopCountdown - window.innerHeight * 0.5);
 
-    // Verhindert Sprünge beim Start
     titleElement.style.position = "relative";
     countdownElement.style.position = "relative";
 
@@ -151,7 +163,6 @@ function moveElementsToPositions(titleElement, countdownElement, duration) {
 
         let easedProgress = easeInOutQuad(progress);
 
-        // Bewegung nach oben (negative Werte)
         titleElement.style.transform = `translateY(${titleMoveDistance * easedProgress}px)`;
         countdownElement.style.transform = `translateY(${countdownMoveDistance * easedProgress}px)`;
 
@@ -163,10 +174,8 @@ function moveElementsToPositions(titleElement, countdownElement, duration) {
     requestAnimationFrame(step);
 }
 
-// Startet das Countdown-Intervall
 const countdownInterval = setInterval(updateCountdown, 1000);
 
-// **Bild spawnen**
 function spawnImage() {
     if (!allowSpawning) return;
 
