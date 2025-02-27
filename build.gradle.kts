@@ -59,7 +59,7 @@ tasks.register<Jar>("fatJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
-        attributes["Main-Class"] = "org.example.MainKt"
+        attributes["Main-Class"] = "org.example.ApplicationKt"
     }
 }
 
