@@ -13,7 +13,7 @@ fun HTML.countdownPage(imageFiles: List<String>) {
             src = "/static/mainImage.png"
             classes = setOf("main-image")
             id = "main-image"
-            style = "width: 450px; height: auto;"
+            style = "width: 700px; height: auto;"
         }
 
         div { id = "image-wrapper" }
