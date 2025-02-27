@@ -21,22 +21,24 @@ function updateProtectedAreas() {
         let titleRect = title.getBoundingClientRect();
         let countdownRect = countdown.getBoundingClientRect();
         let mainImageRect = mainImage.getBoundingClientRect();
+        let padding = 25; // Extra Abstand um die geschützten Bereiche
 
         protectedAreas = [
-            { x: titleRect.left, y: titleRect.top, width: titleRect.width, height: titleRect.height },
-            { x: countdownRect.left, y: countdownRect.top, width: countdownRect.width, height: countdownRect.height },
-            { x: mainImageRect.left, y: mainImageRect.top, width: mainImageRect.width, height: mainImageRect.height }
+            { x: titleRect.left - padding, y: titleRect.top - padding, width: titleRect.width + 2 * padding, height: titleRect.height + 2 * padding },
+            { x: countdownRect.left - padding, y: countdownRect.top - padding, width: countdownRect.width + 2 * padding, height: countdownRect.height + 2 * padding },
+            { x: mainImageRect.left - padding, y: mainImageRect.top - padding, width: mainImageRect.width + 2 * padding, height: mainImageRect.height + 2 * padding }
         ];
     }
 }
 
-// **Checkt, ob eine Position frei ist**
+
 function isValidSpawnPosition(x, y, width, height) {
+    // Aktuelle geschützte Bereiche nochmal updaten (z.B. nach Resize)
+    updateProtectedAreas();
+
     return !protectedAreas.some(area =>
-            x < area.x + area.width &&
-            x + width > area.x &&
-            y < area.y + area.height &&
-            y + height > area.y
+            x + width > area.x && x < area.x + area.width &&
+            y + height > area.y && y < area.y + area.height
         ) &&
         !Array.from(imageWrapper.children).some(img => {
             let rect = img.getBoundingClientRect();
@@ -44,21 +46,39 @@ function isValidSpawnPosition(x, y, width, height) {
         });
 }
 
-// **Gibt eine zufällige, freie Position zurück**
+
 function getRandomPosition(width, height) {
     let x, y, attempts = 0;
     do {
         x = Math.random() * (window.innerWidth - width);
         y = Math.random() * (window.innerHeight - height);
         attempts++;
-        if (attempts > 50) return null;
+
+        if (attempts > 50) return null; // Sicherheitsabbruch nach 50 Versuchen
+
+        // **Hier nochmal live checken, ob es im Countdown-Bereich ist**
+        let countdown = document.getElementById("countdown");
+        let countdownRect = countdown.getBoundingClientRect();
+        let padding = 25; // Abstand halten
+
+        let inCountdownArea = (
+            x + width > countdownRect.left - padding &&
+            x < countdownRect.right + padding &&
+            y + height > countdownRect.top - padding &&
+            y < countdownRect.bottom + padding
+        );
+
+        if (inCountdownArea) continue; // Falls zu nah am Countdown: neue Position suchen
+
     } while (!isValidSpawnPosition(x, y, width, height));
+
     return { x, y };
 }
 
+
 // **Countdown aktualisieren**
 function updateCountdown() {
-    const targetDate = new Date('February 27, 2025 7:30:00').getTime();
+    const targetDate = new Date('March 14, 2025 14:00:00').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -84,7 +104,6 @@ function updateCountdown() {
             allowSpawning = false;
             if (mainImage) {
                 mainImage.style.opacity = '0';
-                mainImage.style.transition = 'opacity 2s ease-in-out';
             }
         }
 
@@ -96,11 +115,7 @@ function updateCountdown() {
 
             countdownElement.style.fontSize = `${4 * scaleFactor}rem`;
             countdownElement.style.textShadow = `0px 0px ${shadowIntensity}px rgba(255, 255, 255, 0.8)`;
-            countdownElement.style.position = 'absolute';
-            countdownElement.style.top = '50%';
-            countdownElement.style.left = '50%';
             countdownElement.style.transform = 'translate(-50%, -50%)';
-            countdownElement.style.transition = 'all 0.3s ease-out';
         }
     } else {
         countdownElement.innerHTML = "Time's up!";

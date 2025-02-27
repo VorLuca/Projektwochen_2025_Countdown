@@ -12,7 +12,7 @@ import kotlinx.html.*
 import java.io.File
 
 fun main() {
-    val port = System.getenv("PORT")?.toIntOrNull() ?: 8080
+    val port = System.getenv("PORT")?.toIntOrNull() ?: 8080  // ✅ Port aus Railway-Umgebungsvariable lesen
 
     embeddedServer(Netty, port = port) {
         install(DefaultHeaders)
@@ -20,11 +20,11 @@ fun main() {
 
         routing {
             static("/static") {
-                files("public")
+                files("public") // ✅ Statische Dateien aus "public/" bereitstellen
             }
 
             get("/") {
-                val imageDir = File("public/testimages")
+                val imageDir = File("public/testimages") // ✅ Bilder aus "public/testimages" laden
                 val imageFiles = imageDir.listFiles()?.map { it.name } ?: emptyList()
 
                 call.respondHtml {
@@ -202,32 +202,23 @@ fun main() {
                                 }
                                 
                                 function updateCountdown() {
-    const targetDate = new Date('February 27, 2025 7:33:00').getTime();
-    const now = new Date().getTime();
-    const timeLeft = targetDate - now;
+                                    const targetDate = new Date('March 14, 2025 10:00:00').getTime();
+                                    const now = new Date().getTime();
+                                    const timeLeft = targetDate - now;
 
-    if (timeLeft > 0) {
-        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                                    if (timeLeft > 0) {
+                                        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                                        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                                        document.getElementById('countdown').innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+                                    } else {
+                                        document.getElementById('countdown').innerHTML = "Time's up!";
+                                    }
+                                }
 
-        let countdownText = [];
-
-        if (days > 0) countdownText.push(days + "d");
-        if (hours > 0) countdownText.push(hours + "h");
-        if (minutes > 0) countdownText.push(minutes + "m");
-        countdownText.push(seconds + "s"); // Sekunden immer anzeigen
-
-        document.getElementById('countdown').innerHTML = countdownText.join(" ");
-    } else {
-        document.getElementById('countdown').innerHTML = "Time's up!";
-    }
-}
-
-setInterval(updateCountdown, 1000);
-updateCountdown();
-
+                                setInterval(updateCountdown, 1000);
+                                updateCountdown();
                                 setInterval(spawnImage, 3000);
                                 """
                             }
