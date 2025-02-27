@@ -75,8 +75,8 @@ function getRandomPosition(width, height) {
     return { x, y };
 }
 
+let animationStarted = false;
 
-// **Countdown aktualisieren**
 function updateCountdown() {
     const targetDate = new Date('March 14, 2025 14:00:00').getTime();
     const now = new Date().getTime();
@@ -84,6 +84,7 @@ function updateCountdown() {
 
     const countdownElement = document.getElementById('countdown');
     const mainImage = document.getElementById('main-image');
+    const titleElement = document.getElementById('title');
 
     if (timeLeft > 0) {
         const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
@@ -99,15 +100,18 @@ function updateCountdown() {
 
         countdownElement.innerHTML = countdownText.join(" ");
 
-        // **Ab 20 Sekunden: Keine Bilder mehr & Logo ausblenden**
-        if (timeLeft <= 20000) {
+        if (timeLeft <= 20000 && !animationStarted) {
+            animationStarted = true; // Animation nur einmal starten
             allowSpawning = false;
             if (mainImage) {
+                mainImage.style.transition = 'opacity 3s ease-out';
                 mainImage.style.opacity = '0';
+                setTimeout(() => {
+                    animateTitleUp(titleElement);
+                }, 3000);
             }
         }
 
-        // **Ab 10 Sekunden: Countdown wächst & Schatten verstärkt sich**
         if (timeLeft <= 10000) {
             let remainingSeconds = Math.ceil(timeLeft / 1000);
             let scaleFactor = 1 + (10 - remainingSeconds) * 0.05;
@@ -115,12 +119,41 @@ function updateCountdown() {
 
             countdownElement.style.fontSize = `${4 * scaleFactor}rem`;
             countdownElement.style.textShadow = `0px 0px ${shadowIntensity}px rgba(255, 255, 255, 0.8)`;
-            countdownElement.style.transform = 'translate(-50%, -50%)';
         }
     } else {
         countdownElement.innerHTML = "Time's up!";
+        clearInterval(countdownInterval); // Stoppt das Intervall, wenn die Zeit abgelaufen ist
     }
 }
+
+function animateTitleUp(element) {
+    let start = null;
+    const startTop = element.offsetTop; // **Ermittle die aktuelle Position des Elements**
+    const endTop = 10; // Endposition in px
+    const duration = 5000; // Animationszeit in ms
+
+    function step(timestamp) {
+        if (!start) start = timestamp;
+        let progress = (timestamp - start) / duration;
+        if (progress > 1) progress = 1;
+
+        let currentTop = startTop + (endTop - startTop) * progress;
+        element.style.position = 'absolute';
+        element.style.top = `${currentTop}px`;
+        element.style.left = '50%';
+        element.style.transform = 'translateX(-50%)';
+
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+
+// Startet das Countdown-Intervall
+const countdownInterval = setInterval(updateCountdown, 1000);
 
 // **Bild spawnen**
 function spawnImage() {
