@@ -88,7 +88,7 @@ backgroundOverlay.style.transition = "background-color 1s linear";
 document.body.appendChild(backgroundOverlay);
 
 function updateCountdown() {
-    const targetDate = new Date('February 27, 2025 11:54:30').getTime();
+    const targetDate = new Date('February 28, 2025 12:40:30').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -191,14 +191,15 @@ function spawnImage() {
     img.classList.add("image-container");
     activeImages.add(imgSrc);
 
-    let size = Math.floor(Math.random() * 100) + 150;
-    let position = getRandomPosition(size, size);
+    let width = Math.floor(Math.random() * 100) + 150;
+    let height = Math.round(width * (2160 / 3840));
+    let position = getRandomPosition(width, height);
     if (!position) return;
 
     img.style.left = `${position.x}px`;
     img.style.top = `${position.y}px`;
-    img.style.width = `${size}px`;
-    img.style.height = `${size}px`;
+    img.style.width = `${width}px`;
+    img.style.height = `${height}px`;
     imageWrapper.appendChild(img);
 
     setTimeout(() => img.classList.add("visible"), 100);
