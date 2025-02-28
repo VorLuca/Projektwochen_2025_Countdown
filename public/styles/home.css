@@ -40,7 +40,7 @@ body {
     object-fit: contain;
     border-radius: 15px;
     box-shadow: -10px 0px 20px rgba(0, 0, 0, 0.8), 10px 0px 20px rgba(0, 0, 0, 0.8);
-    -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.2) 75%, rgba(0, 0, 0, 0) 100%);
+    webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.2) 75%, rgba(0, 0, 0, 0) 100%);
     mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 25%, rgba(0, 0, 0, 0.9) 75%, rgba(0, 0, 0, 0) 100%);
 }
 
@@ -48,7 +48,7 @@ body {
     text-align: center;
     width: 95%;
     font-size: 10rem;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 .company-section, .product-section, .team-section {
