@@ -13,7 +13,7 @@ import java.time.ZonedDateTime
 import java.time.ZoneId
 
 fun Routing.configureRouting() {
-    val countdownEndTime = ZonedDateTime.of(2025, 2, 14, 14, 0, 0, 0, ZoneId.of("UTC")).toInstant()
+    val countdownEndTime = ZonedDateTime.of(2025, 3, 14, 14, 0, 0, 0, ZoneId.of("UTC")).toInstant()
 
     get("/") {
         val imageDir = File("public/images")
