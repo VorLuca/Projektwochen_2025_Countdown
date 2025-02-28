@@ -88,7 +88,7 @@ backgroundOverlay.style.transition = "background-color 1s linear";
 document.body.appendChild(backgroundOverlay);
 
 function updateCountdown() {
-    const targetDate = new Date('February 28, 2025 12:09:30').getTime();
+    const targetDate = new Date('February 28, 2025 12:42:30').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
@@ -103,9 +103,9 @@ function updateCountdown() {
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
         let countdownText = [];
-        if (days > 0) countdownText.push(days + "d");
-        if (hours > 0) countdownText.push(hours + "h");
-        if (minutes > 0) countdownText.push(minutes + "m");
+        countdownText.push(days + "d");
+        countdownText.push(hours + "h");
+        countdownText.push(minutes + "m");
         countdownText.push(seconds + "s");
 
         countdownElement.innerHTML = countdownText.join(" ");
@@ -117,11 +117,14 @@ function updateCountdown() {
         if (timeLeft <= 10000) {
             let progress = (10000 - timeLeft) / 10000;
 
-            countdownElement.style.transform = `scale(${1 + progress})`;
-            countdownElement.style.textShadow = `0 0 ${progress * 30}px rgba(255, 255, 255, ${progress})`;
+            countdownElement.style.transform = `scale(${1 + progress * 0.5})`;
+            countdownElement.style.textShadow = `0 0 ${progress * 40}px rgba(255, 255, 255, ${progress})`;
 
-            backgroundOverlay.style.backgroundColor = `rgba(12, 12, 12, ${0.8 * progress})`;
+            backgroundOverlay.style.backgroundColor = `rgba(0, 0, 0, ${0.6 * Math.sqrt(progress)})`;
+
+            backgroundOverlay.style.backdropFilter = `blur(${progress * 5}px)`;
         }
+
 
 
         if (timeLeft <= 18000 && !animationStarted) {
