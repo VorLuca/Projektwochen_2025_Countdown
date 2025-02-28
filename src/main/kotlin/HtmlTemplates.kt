@@ -85,7 +85,7 @@ fun HTML.werbevideoPage() {
                     const video = document.querySelector(".full-screen-video");
                     document.addEventListener("keydown", (event) => {
                         if (event.code === "Space" && video) {
-                            event.preventDefault(); // Verhindert Scrollen der Seite
+                            event.preventDefault(); 
                             if (video.paused) {
                                 video.play();
                             } else {
@@ -105,8 +105,84 @@ fun HTML.homePage() {
     head {
         title("Home")
         link(rel = "stylesheet", href = "/static/styles/styles.css")
+        style {
+            unsafe {
+                +"""
+                body {
+                    margin: 0;
+                    padding: 0;
+                    height: 100vh;
+                    overflow-x: hidden;
+                    overflow-y: auto; 
+                    background-color: #111; 
+                }
+
+                .background-container {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-start;
+                    padding-top: 20px;
+                    z-index: -1; 
+                }
+
+                .background-image {
+                    width: 75%; 
+                    max-width: 1200px;
+                    height: auto;
+                    object-fit: contain;
+                    border-radius: 15px; 
+                    box-shadow: -10px 0px 20px rgba(0, 0, 0, 0.8), 10px 0px 20px rgba(0, 0, 0, 0.8);
+
+                    -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.2) 75%, rgba(0, 0, 0, 0) 100%);
+                    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 25%, rgba(0, 0, 0, 0.9) 75%, rgba(0, 0, 0, 0) 100%);
+                }
+
+                .scroll-container {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 90vh; 
+                }
+
+                .content-wrapper {
+                    width: 90%;
+                    max-width: 98vw;
+                    background: #0d1b14; 
+                    color: white;
+                    padding: 40px;
+                    text-align: justify;
+                    font-size: 1.2rem;
+                    border-radius: 10px;
+                    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+                    position: relative;
+                    z-index: 1;
+                }
+                """
+            }
+        }
     }
     body {
-        h1 { text("Willkommen zurück!") }
+        div(classes = "background-container") {
+            img(src = "/static/bsTopImage.png", alt = "Hintergrundbild", classes = "background-image")
+        }
+        div(classes = "scroll-container") {
+            div(classes = "content-wrapper") {
+                h1 { text("Willkommen zurück!") }
+                p { text("Scrolle nach unten, um den gesamten Inhalt zu sehen.") }
+                p { text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.") }
+                p { text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.") }
+                p { text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.") }
+                p { text("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.") }
+                p { text("Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra.") }
+                p { text("Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh.") }
+                p { text("Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.") }
+                p { text("Nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.") }
+            }
+        }
     }
 }

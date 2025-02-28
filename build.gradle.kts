@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib") // ✅ Stellt sicher, dass Kotlin enthalten ist
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.ktor:ktor-server-core:2.3.3")
     implementation("io.ktor:ktor-server-netty:2.3.3")
@@ -35,14 +35,12 @@ kotlin {
     jvmToolchain(17)
 }
 
-// ✅ Manifest für ALLE JAR-Dateien setzen
 tasks.withType<Jar>().configureEach {
     manifest {
         attributes["Main-Class"] = "org.example.ApplicationKt"
     }
 }
 
-// ✅ Richtiges Fat JAR mit ALLE Abhängigkeiten erzeugen
 tasks.register<Jar>("fatJar") {
     archiveBaseName.set("app")
     archiveClassifier.set("")
