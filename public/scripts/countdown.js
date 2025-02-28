@@ -215,6 +215,8 @@ function spawnImage() {
 
     setTimeout(() => img.classList.add("visible"), 100);
 
+    img.addEventListener("click", () => enlargeImage(img));
+
     setTimeout(() => {
         img.classList.add("fading-out");
         setTimeout(() => {
@@ -222,4 +224,86 @@ function spawnImage() {
             activeImages.delete(imgSrc);
         }, 1000);
     }, Math.random() * 5000 + 2000);
+}
+
+function enlargeImage(imgElement) {
+    let imgSrc = imgElement.src;
+    let rect = imgElement.getBoundingClientRect();
+
+    let overlay = document.createElement("div");
+    overlay.classList.add("image-overlay");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100vw";
+    overlay.style.height = "100vh";
+    overlay.style.background = "rgba(0, 0, 0, 0.8)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "9999";
+    overlay.style.transition = "opacity 0.5s ease-in-out";
+    overlay.style.opacity = "0";
+
+    let enlargedImg = document.createElement("img");
+    enlargedImg.src = imgSrc;
+    enlargedImg.classList.add("enlarged-image");
+    enlargedImg.style.position = "absolute";
+    enlargedImg.style.width = `${imgElement.clientWidth}px`;
+    enlargedImg.style.height = `${imgElement.clientHeight}px`;
+    enlargedImg.style.left = `${rect.left}px`;
+    enlargedImg.style.top = `${rect.top}px`;
+    enlargedImg.style.transition = "all 0.5s ease-in-out";
+    enlargedImg.style.transformOrigin = "center center";
+    enlargedImg.style.opacity = "0";
+    enlargedImg.style.borderRadius = "15px";
+    enlargedImg.style.boxShadow = "0px 4px 15px rgba(255, 255, 255, 0.7)";
+    enlargedImg.style.transform = "scale(0.8)";
+
+    function closeOverlay() {
+        enlargedImg.style.transform = "scale(0.8)";
+        enlargedImg.style.opacity = "0";
+        overlay.style.opacity = "0";
+
+        setTimeout(() => overlay.remove(), 500);
+        document.removeEventListener("keydown", handleKeydown);
+    }
+
+    let closeButton = document.createElement("div");
+    closeButton.classList.add("close-button");
+    closeButton.textContent = "✖";
+    closeButton.style.position = "absolute";
+    closeButton.style.top = "20px";
+    closeButton.style.right = "20px";
+    closeButton.style.fontSize = "24px";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.color = "white";
+    closeButton.style.zIndex = "10000";
+    closeButton.style.textShadow = "2px 2px 5px rgba(0, 0, 0, 0.7)";
+    closeButton.style.transition = "opacity 0.3s ease-in-out";
+    closeButton.addEventListener("click", closeOverlay);
+
+    overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) closeOverlay();
+    });
+
+    function handleKeydown(event) {
+        if (event.key === "Escape") closeOverlay();
+    }
+    document.addEventListener("keydown", handleKeydown);
+
+    overlay.appendChild(enlargedImg);
+    overlay.appendChild(closeButton);
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.style.opacity = "1";
+        enlargedImg.style.width = "80vw";
+        enlargedImg.style.height = "auto";
+        enlargedImg.style.maxHeight = "80vh";
+        enlargedImg.style.left = "50%";
+        enlargedImg.style.top = "50%";
+        enlargedImg.style.transform = "translate(-50%, -50%) scale(1)";
+        enlargedImg.style.opacity = "1";
+    }, 50);
 }

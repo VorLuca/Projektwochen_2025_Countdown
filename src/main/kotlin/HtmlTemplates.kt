@@ -35,7 +35,6 @@ fun HTML.werbevideoPage() {
     body {
         classes = setOf("werbevideo-page")
 
-        // Zurück-Button bleibt immer sichtbar, aber nur leicht angedeutet
         a(href = "/home") {
             classes = setOf("back-button")
             text("⬅ Zurück")
