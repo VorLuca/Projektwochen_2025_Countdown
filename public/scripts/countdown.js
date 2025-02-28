@@ -88,7 +88,7 @@ backgroundOverlay.style.transition = "background-color 1s linear";
 document.body.appendChild(backgroundOverlay);
 
 function updateCountdown() {
-    const targetDate = new Date('February 28, 2025 12:42:30').getTime();
+    const targetDate = new Date('March 14, 2025 14:00:00').getTime();
     const now = new Date().getTime();
     const timeLeft = targetDate - now;
 
