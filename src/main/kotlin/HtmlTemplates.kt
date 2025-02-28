@@ -10,7 +10,7 @@ fun HTML.countdownPage(imageFiles: List<String>) {
     }
     body {
         img {
-            src = "/static/mainImage.png"
+            src = "/static/permaImages/mainImage.png"
             classes = setOf("main-image")
             id = "main-image"
             style = "width: 700px; height: auto;"
@@ -55,8 +55,6 @@ fun HTML.werbevideoPage() {
     }
 }
 
-
-
 fun HTML.homePage() {
     head {
         title("Home")
@@ -65,46 +63,63 @@ fun HTML.homePage() {
     }
     body {
         div(classes = "background-container") {
-            img(src = "/static/bsTopImage.png", alt = "Hintergrundbild", classes = "background-image")
+            img(src = "/static/permaImages/TopImage.JPG", alt = "Hintergrundbild", classes = "background-image")
         }
         div(classes = "scroll-container") {
             div(classes = "spacer") { }
             div(classes = "content-wrapper") {
-                h1 { text("Willkommen zurück!") }
-                p { text("Scrolle nach unten, um den gesamten Inhalt zu sehen.") }
-                p { text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.") }
-                p { text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.") }
-                p { text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.") }
-                p { text("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.") }
-                p { text("Scrolle nach unten, um den gesamten Inhalt zu sehen.") }
-                p { text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.") }
-                p { text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.") }
-                p { text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.") }
-                p { text("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.") }
-                p { text("Scrolle nach unten, um den gesamten Inhalt zu sehen.") }
-                p { text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.") }
-                p { text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.") }
-                p { text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.") }
-                p { text("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.") }
-                p { text("Scrolle nach unten, um den gesamten Inhalt zu sehen.") }
-                p { text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.") }
-                p { text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.") }
-                p { text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.") }
-                p { text("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.") }
-                p { text("Scrolle nach unten, um den gesamten Inhalt zu sehen.") }
-                p { text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.") }
-                p { text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.") }
-                p { text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.") }
-                p { text("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.") }
-                p { text("Scrolle nach unten, um den gesamten Inhalt zu sehen.") }
-                p { text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.") }
-                p { text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.") }
-                p { text("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.") }
-                p { text("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.") }
+                h1 { text("KEY-TREE") }
+
+                div(classes = "company-section") {
+                    div(classes = "company-info") {
+                        h2 { text("Über unsere Firma") }
+                        p { text("Wir sind ein führendes Unternehmen im Bereich innovativer Lösungen und digitaler Erlebnisse.") }
+                        p { text("Unser Ziel ist es, durch modernste Technologien und kreative Ansätze nachhaltige Werte zu schaffen.") }
+                        p { text("Mit einem engagierten Team entwickeln wir maßgeschneiderte Lösungen für unsere Kunden weltweit.") }
+                    }
+                    div(classes = "company-image") {
+                        img(src = "/static/permaImages/mainImage.png", alt = "Unsere Firma", classes = "company-photo")
+                    }
+                }
+
+                div(classes = "product-section") {
+                    div(classes = "product-image") {
+                        a(href = "/werbevideo") {
+                            img(src = "/static/permaImages/ProductImage.JPG", alt = "Unser Produkt", classes = "product-photo")
+                        }
+                    }
+                    div(classes = "product-info") {
+                        h2 { text("Unser Produkt") }
+                        p { text("Unser innovatives Produkt revolutioniert den Markt und bietet einzigartige Funktionen.") }
+                        p { text("Es wurde mit modernster Technologie entwickelt, um Ihnen die besten Ergebnisse zu liefern.") }
+                        p { text("Erfahren Sie mehr über unser Produkt im Werbevideo.") }
+
+                        a(href = "/werbevideo", classes = "product-link") {
+                            text("➡ Mehr erfahren")
+                        }
+                    }
+                }
+
+                div(classes = "full-product-image") {
+                    img(src = "/static/permaImages/ProductImage.JPG", alt = "Großes Produktbild", classes = "large-product-photo")
+                }
+
+                div(classes = "team-section") {
+                    div(classes = "team-info") {
+                        h2 { text("Unser Team") }
+                        p { text("Unser Team besteht aus erfahrenen Experten, die mit Leidenschaft an innovativen Lösungen arbeiten.") }
+                        p { text("Jeder einzelne bringt seine einzigartigen Fähigkeiten ein, um unseren Kunden das beste Erlebnis zu bieten.") }
+                    }
+                    div(classes = "team-image") {
+                        img(src = "/static/permaImages/TeamImage.JPG", alt = "Unser Team", classes = "team-photo")
+                    }
+                }
             }
         }
 
         script(src = "/static/scripts/adjustSpacer.js") {}
     }
 }
+
+
 
