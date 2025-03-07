@@ -143,16 +143,19 @@ function updateCountdown() {
         countdownElement.innerHTML = "Time's up!";
         clearInterval(countdownInterval);
 
-        // Zoom-in-Effekt auf den Countdown
         countdownElement.style.transition = "transform 0.8s ease-in-out";
         countdownElement.style.transform = "scale(10)";
 
-        // Die gesamte Seite langsam ausblenden
         document.body.style.transition = "opacity 0.8s ease-in-out";
         document.body.style.opacity = "0";
 
         setTimeout(() => {
             window.location.href = "/werbevideo";
+
+            setTimeout(() => {
+                window.location.href = "/home";
+            }, 10000);
+
         }, 800);
     }
 }
