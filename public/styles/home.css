@@ -233,3 +233,23 @@ body {
     z-index: 1;
     box-sizing: border-box;
 }
+
+.company-section, .product-section, .team-section {
+    opacity: 0;
+    transform: translateX(-200px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.company-section.visible, .product-section.visible, .team-section.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.product-section {
+    transform: translateX(200px);
+}
+
+.product-section.visible {
+    transform: translateX(0);
+}
+

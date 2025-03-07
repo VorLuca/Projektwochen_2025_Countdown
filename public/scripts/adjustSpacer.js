@@ -1,18 +1,22 @@
-function adjustSpacerHeight() {
-    let contentWrapper = document.querySelector('.content-wrapper');
-    let image = document.querySelector('.background-image');
-    let spacer = document.querySelector('.spacer');
+document.addEventListener("DOMContentLoaded", function () {
+    const sections = document.querySelectorAll(".company-section, .product-section, .team-section");
 
-    if (!contentWrapper || !image || !spacer) return;
+    function checkVisibility() {
+        const triggerBottom = window.innerHeight * 0.9;
+        const triggerTop = window.innerHeight * 0.1;
 
-    let contentHeight = contentWrapper.offsetHeight;
-    let imageHeight = image.offsetHeight;
+        sections.forEach(section => {
+            const sectionTop = section.getBoundingClientRect().top;
+            const sectionBottom = section.getBoundingClientRect().bottom;
 
-    let spacerHeight = Math.max(50, contentHeight - imageHeight);
+            if (sectionTop < triggerBottom && sectionBottom > triggerTop) {
+                section.classList.add("visible");
+            } else {
+                section.classList.remove("visible");
+            }
+        });
+    }
 
-    spacer.style.height = `${spacerHeight}px`;
-}
-
-window.addEventListener('resize', adjustSpacerHeight);
-window.addEventListener('load', adjustSpacerHeight);
-adjustSpacerHeight();
+    window.addEventListener("scroll", checkVisibility);
+    checkVisibility();
+});
