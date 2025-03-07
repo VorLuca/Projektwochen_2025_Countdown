@@ -10,7 +10,7 @@ fun HTML.countdownPage(imageFiles: List<String>) {
     }
     body {
         img {
-            src = "/static/mainImage.png"
+            src = "/static/permaImages/mainImage.png"
             classes = setOf("main-image")
             id = "main-image"
             style = "width: 700px; height: auto;"
@@ -51,62 +51,75 @@ fun HTML.werbevideoPage() {
             }
         }
 
-        style {
-            unsafe {
-                +"""
-                .back-button {
-                    position: fixed;
-                    top: 20px;
-                    left: 20px;
-                    font-size: 20px;
-                    font-weight: bold;
-                    background-color: rgba(0, 0, 0, 0.3);
-                    color: white;
-                    padding: 10px 15px;
-                    border-radius: 5px;
-                    text-decoration: none;
-                    z-index: 1000;
-                    opacity: 0.2;  /* Nur leicht sichtbar */
-                    transition: opacity 0.3s ease-in-out, background-color 0.3s;
-                }
-
-                .back-button:hover {
-                    opacity: 1; /* Beim Hovern wird er sichtbar */
-                    background-color: rgba(0, 0, 0, 0.8);
-                }
-                """
-            }
-        }
-
-        script {
-            unsafe {
-                +"""
-                document.addEventListener("DOMContentLoaded", () => {
-                    const video = document.querySelector(".full-screen-video");
-                    document.addEventListener("keydown", (event) => {
-                        if (event.code === "Space" && video) {
-                            event.preventDefault(); // Verhindert Scrollen der Seite
-                            if (video.paused) {
-                                video.play();
-                            } else {
-                                video.pause();
-                            }
-                        }
-                    });
-                });
-                """
-            }
-        }
+        script(src = "/static/scripts/werbevideo.js") {}
     }
 }
-
 
 fun HTML.homePage() {
     head {
         title("Home")
         link(rel = "stylesheet", href = "/static/styles/styles.css")
+        link(rel = "stylesheet", href = "/static/styles/home.css")
     }
     body {
-        h1 { text("Willkommen zurück!") }
+        div(classes = "background-container") {
+            img(src = "/static/permaImages/TopImage.JPG", alt = "Hintergrundbild", classes = "background-image")
+        }
+        div(classes = "scroll-container") {
+            div(classes = "spacer") { }
+            div(classes = "content-wrapper") {
+                h1 { text("KEY-TREE") }
+
+                div(classes = "company-section") {
+                    div(classes = "company-info") {
+                        h2 { text("Über unsere Firma") }
+                        p { text("Wir sind ein führendes Unternehmen im Bereich innovativer Lösungen und digitaler Erlebnisse.") }
+                        p { text("Unser Ziel ist es, durch modernste Technologien und kreative Ansätze nachhaltige Werte zu schaffen.") }
+                        p { text("Mit einem engagierten Team entwickeln wir maßgeschneiderte Lösungen für unsere Kunden weltweit.") }
+                    }
+                    div(classes = "company-image") {
+                        img(src = "/static/permaImages/mainImage.png", alt = "Unsere Firma", classes = "company-photo")
+                    }
+                }
+
+                div(classes = "product-section") {
+                    div(classes = "product-image") {
+                        a(href = "/werbevideo") {
+                            img(src = "/static/permaImages/ProductImage.JPG", alt = "Unser Produkt", classes = "product-photo")
+                        }
+                    }
+                    div(classes = "product-info") {
+                        h2 { text("Unser Produkt") }
+                        p { text("Unser innovatives Produkt revolutioniert den Markt und bietet einzigartige Funktionen.") }
+                        p { text("Es wurde mit modernster Technologie entwickelt, um Ihnen die besten Ergebnisse zu liefern.") }
+                        p { text("Erfahren Sie mehr über unser Produkt im Werbevideo.") }
+
+                        a(href = "/werbevideo", classes = "product-link") {
+                            text("➡ Mehr erfahren")
+                        }
+                    }
+                }
+
+                div(classes = "full-product-image") {
+                    img(src = "/static/permaImages/ProductImage.JPG", alt = "Großes Produktbild", classes = "large-product-photo")
+                }
+
+                div(classes = "team-section") {
+                    div(classes = "team-info") {
+                        h2 { text("Unser Team") }
+                        p { text("Unser Team besteht aus erfahrenen Experten, die mit Leidenschaft an innovativen Lösungen arbeiten.") }
+                        p { text("Jeder einzelne bringt seine einzigartigen Fähigkeiten ein, um unseren Kunden das beste Erlebnis zu bieten.") }
+                    }
+                    div(classes = "team-image") {
+                        img(src = "/static/permaImages/TeamImage.JPG", alt = "Unser Team", classes = "team-photo")
+                    }
+                }
+            }
+        }
+
+        script(src = "/static/scripts/adjustSpacer.js") {}
     }
 }
+
+
+
