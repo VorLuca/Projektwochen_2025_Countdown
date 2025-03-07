@@ -140,23 +140,27 @@ function updateCountdown() {
             }
         }
     } else {
-        countdownElement.innerHTML = "Time's up!";
-        clearInterval(countdownInterval);
+        if (timeLeft <= -10000) {
+            window.location.href = "/home";
+        } else {
+            countdownElement.innerHTML = "Time's up!";
+            clearInterval(countdownInterval);
 
-        countdownElement.style.transition = "transform 0.8s ease-in-out";
-        countdownElement.style.transform = "scale(10)";
+            countdownElement.style.transition = "transform 0.8s ease-in-out";
+            countdownElement.style.transform = "scale(10)";
 
-        document.body.style.transition = "opacity 0.8s ease-in-out";
-        document.body.style.opacity = "0";
-
-        setTimeout(() => {
-            window.location.href = "/werbevideo";
+            document.body.style.transition = "opacity 0.8s ease-in-out";
+            document.body.style.opacity = "0";
 
             setTimeout(() => {
-                window.location.href = "/home";
-            }, 10000);
+                window.location.href = "/werbevideo";
 
-        }, 800);
+                setTimeout(() => {
+                    window.location.href = "/home";
+                }, 10000);
+
+            }, 800);
+        }
     }
 }
 
