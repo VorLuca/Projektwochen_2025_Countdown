@@ -212,30 +212,33 @@ function spawnImage() {
     img.classList.add("image-container");
     activeImages.add(imgSrc);
 
-    let width = Math.floor(Math.random() * 100) + 150;
-    let height = Math.round(width * (2160 / 3840));
-    let position = getRandomPosition(width, height);
-    if (!position) return;
+    img.onload = function() {
+        let width = Math.floor(Math.random() * 100) + 150;
+        let aspectRatio = img.naturalWidth / img.naturalHeight;
+        let height = Math.round(width / aspectRatio);
 
-    img.style.left = `${position.x}px`;
-    img.style.top = `${position.y}px`;
-    img.style.width = `${width}px`;
-    img.style.height = `${height}px`;
-    imageWrapper.appendChild(img);
+        let position = getRandomPosition(width, height);
+        if (!position) return;
 
-    setTimeout(() => img.classList.add("visible"), 100);
+        img.style.left = `${position.x}px`;
+        img.style.top = `${position.y}px`;
+        img.style.width = `${width}px`;
+        img.style.height = `${height}px`;
+        imageWrapper.appendChild(img);
 
-    img.addEventListener("click", () => enlargeImage(img));
+        setTimeout(() => img.classList.add("visible"), 100);
 
-    setTimeout(() => {
-        img.classList.add("fading-out");
+        img.addEventListener("click", () => enlargeImage(img));
+
         setTimeout(() => {
-            img.remove();
-            activeImages.delete(imgSrc);
-        }, 1000);
-    }, Math.random() * 5000 + 2000);
+            img.classList.add("fading-out");
+            setTimeout(() => {
+                img.remove();
+                activeImages.delete(imgSrc);
+            }, 1000);
+        }, Math.random() * 5000 + 2000);
+    };
 }
-
 function enlargeImage(imgElement) {
     let imgSrc = imgElement.src;
     let rect = imgElement.getBoundingClientRect();
@@ -258,62 +261,55 @@ function enlargeImage(imgElement) {
     let enlargedImg = document.createElement("img");
     enlargedImg.src = imgSrc;
     enlargedImg.classList.add("enlarged-image");
-    enlargedImg.style.position = "absolute";
-    enlargedImg.style.width = `${imgElement.clientWidth}px`;
-    enlargedImg.style.height = `${imgElement.clientHeight}px`;
-    enlargedImg.style.left = `${rect.left}px`;
-    enlargedImg.style.top = `${rect.top}px`;
-    enlargedImg.style.transition = "all 0.5s ease-in-out";
-    enlargedImg.style.transformOrigin = "center center";
-    enlargedImg.style.opacity = "0";
+    enlargedImg.style.position = "relative";
+    enlargedImg.style.maxWidth = "90vw";
+    enlargedImg.style.maxHeight = "90vh";
     enlargedImg.style.borderRadius = "15px";
     enlargedImg.style.boxShadow = "0px 4px 15px rgba(255, 255, 255, 0.7)";
-    enlargedImg.style.transform = "scale(0.8)";
+    enlargedImg.style.transition = "all 0.3s ease-in-out";
 
-    function closeOverlay() {
-        enlargedImg.style.transform = "scale(0.8)";
-        enlargedImg.style.opacity = "0";
-        overlay.style.opacity = "0";
-
-        setTimeout(() => overlay.remove(), 500);
-        document.removeEventListener("keydown", handleKeydown);
-    }
+    let container = document.createElement("div");
+    container.style.position = "relative";
+    container.style.display = "inline-block";
+    container.appendChild(enlargedImg);
 
     let closeButton = document.createElement("div");
     closeButton.classList.add("close-button");
     closeButton.textContent = "✖";
     closeButton.style.position = "absolute";
-    closeButton.style.top = "20px";
-    closeButton.style.right = "20px";
+    closeButton.style.top = "10px";
+    closeButton.style.right = "10px";
     closeButton.style.fontSize = "24px";
     closeButton.style.cursor = "pointer";
     closeButton.style.color = "white";
     closeButton.style.zIndex = "10000";
     closeButton.style.textShadow = "2px 2px 5px rgba(0, 0, 0, 0.7)";
+    closeButton.style.background = "rgba(0, 0, 0, 0.5)";
+    closeButton.style.padding = "5px 10px";
+    closeButton.style.borderRadius = "5px";
     closeButton.style.transition = "opacity 0.3s ease-in-out";
     closeButton.addEventListener("click", closeOverlay);
 
-    overlay.addEventListener("click", (event) => {
-        if (event.target === overlay) closeOverlay();
-    });
+    function closeOverlay() {
+        overlay.style.opacity = "0";
+        setTimeout(() => overlay.remove(), 500);
+        document.removeEventListener("keydown", handleKeydown);
+    }
 
     function handleKeydown(event) {
         if (event.key === "Escape") closeOverlay();
     }
     document.addEventListener("keydown", handleKeydown);
 
-    overlay.appendChild(enlargedImg);
-    overlay.appendChild(closeButton);
+    overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) closeOverlay();
+    });
+
+    container.appendChild(closeButton);
+    overlay.appendChild(container);
     document.body.appendChild(overlay);
 
     setTimeout(() => {
         overlay.style.opacity = "1";
-        enlargedImg.style.width = "80vw";
-        enlargedImg.style.height = "auto";
-        enlargedImg.style.maxHeight = "80vh";
-        enlargedImg.style.left = "50%";
-        enlargedImg.style.top = "50%";
-        enlargedImg.style.transform = "translate(-50%, -50%) scale(1)";
-        enlargedImg.style.opacity = "1";
     }, 50);
 }
