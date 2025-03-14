@@ -63,7 +63,7 @@ fun HTML.homePage() {
     }
     body {
         div(classes = "background-container") {
-            img(src = "/static/permaImages/TopImageGood.JPG", alt = "Hintergrundbild", classes = "background-image")
+            img(src = "/static/permaImages/TopImage.JPG", alt = "Hintergrundbild", classes = "background-image")
         }
         div(classes = "scroll-container") {
             div(classes = "spacer") { }
@@ -167,7 +167,7 @@ fun HTML.homePage() {
                 }
 
                 div(classes = "full-product-image") {
-                    img(src = "/static/permaImages/ProductImageGood.JPG", alt = "Großes Produktbild", classes = "large-product-photo")
+                    img(src = "/static/permaImages/ProductImage.JPG", alt = "Großes Produktbild", classes = "large-product-photo")
                 }
 
                 div(classes = "team-section") {
