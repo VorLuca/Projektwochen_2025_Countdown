@@ -46,8 +46,8 @@ fun HTML.werbevideoPage() {
             attributes["controls"] = "true"
             attributes["preload"] = "auto"
             source {
-                attributes["src"] = "/videos/werbevideo.mp4"
-                attributes["type"] = "video/mp4"
+                attributes["src"] = "/videos/Key_Tree_Demostration_compressed.m4v"
+                attributes["type"] = "video/x-m4v"
             }
         }
 
@@ -72,30 +72,96 @@ fun HTML.homePage() {
 
                 div(classes = "company-section") {
                     div(classes = "company-info") {
-                        h2 { text("Über unsere Firma") }
-                        p { text("Wir sind ein führendes Unternehmen im Bereich innovativer Lösungen und digitaler Erlebnisse.") }
-                        p { text("Unser Ziel ist es, durch modernste Technologien und kreative Ansätze nachhaltige Werte zu schaffen.") }
-                        p { text("Mit einem engagierten Team entwickeln wir maßgeschneiderte Lösungen für unsere Kunden weltweit.") }
+                        h2 { text("Unser Projekt – Innovation aus Leidenschaft") }
+
+                        p {
+                            text("Wir sind ein ")
+                            em { text("kreatives Team") }
+                            text(" von Auszubildenden, das mit Engagement und Teamgeist eine eigene Geschäftsidee entwickelt hat.")
+                        }
+
+                        p {
+                            text("Unsere Vision? Eine Lösung schaffen, die ")
+                            strong { text("praktisch, elegant und einzigartig") }
+                            text(" ist. So entstand der ")
+                            em { text("Key Tree") }
+                            text(" – ein Produkt, das sowohl ")
+                            strong { text("ästhetische Schönheit") }
+                            text(" als auch ")
+                            strong { text("clevere Funktionalität") }
+                            text(" vereint.")
+                        }
                     }
+
                     div(classes = "company-image") {
-                        img(src = "/static/permaImages/mainImage.png", alt = "Unsere Firma", classes = "company-photo")
+                        img(src = "/static/permaImages/mainImage.png", alt = "Unser Projekt", classes = "company-photo")
                     }
                 }
 
                 div(classes = "product-section") {
                     div(classes = "product-image") {
                         a(href = "/werbevideo") {
-                            img(src = "/static/permaImages/ProductImage.JPG", alt = "Unser Produkt", classes = "product-photo")
+                            img(src = "/static/permaImages/WerbevideoImage.png", alt = "Unser Produkt", classes = "product-photo")
                         }
                     }
+
                     div(classes = "product-info") {
-                        h2 { text("Unser Produkt") }
-                        p { text("Unser innovatives Produkt revolutioniert den Markt und bietet einzigartige Funktionen.") }
-                        p { text("Es wurde mit modernster Technologie entwickelt, um Ihnen die besten Ergebnisse zu liefern.") }
-                        p { text("Erfahren Sie mehr über unser Produkt im Werbevideo.") }
+                        h2 { text("🌿 Key Tree – Der natürliche Weg zur perfekten Ordnung") }
+
+                        p {
+                            strong { text("Ästhetik trifft Funktionalität – für ein stilvolles Zuhause") }
+                        }
+
+                        p {
+                            text("Der ")
+                            strong { text("Key Tree") }
+                            text(" ist mehr als nur eine gewöhnliche Schlüsselaufbewahrung – er vereint ")
+                            em { text("natürliche Materialien, elegantes Design") }
+                            text(" und eine ")
+                            strong { text("clevere, drehbare Konstruktion") }
+                            text(", die Ihnen den Alltag erleichtert.")
+                        }
+
+                        p {
+                            text("Inspiriert von der Natur, bringt dieses Schlüsselbrett die ")
+                            em { text("schlichte Eleganz eines Baumes") }
+                            text(" in Ihren Eingangsbereich und sorgt gleichzeitig für eine ")
+                            strong { text("perfekte Organisation Ihrer Schlüssel.") }
+                        }
+
+                        p {
+                            text("🔹 ")
+                            strong { text("Massives Eichenholz") }
+                            text(" bildet den robusten Stamm – ein Naturmaterial mit einzigartiger Maserung, das für Wärme und Stabilität steht.")
+                        }
+
+                        p {
+                            text("🔹 ")
+                            strong { text("Fein gearbeitete Äste aus dezentem, mattem Messing") }
+                            text(" dienen als stilvolle Haken und setzen elegante Akzente.")
+                        }
+
+                        p {
+                            text("🔹 ")
+                            strong { text("Sanft drehbar für maximalen Komfort") }
+                            text(" – dank der stabilen ")
+                            em { text("Edelstahlkonstruktion im Sockel") }
+                            text(", können Sie Ihre Schlüssel immer ")
+                            strong { text("bequem und mühelos erreichen.") }
+                        }
+
+                        p {
+                            text("Ob als ")
+                            em { text("edle Ergänzung für Ihren Eingangsbereich") }
+                            text(" oder als ")
+                            strong { text("besonderes Geschenk") }
+                            text(", der Key Tree überzeugt durch ")
+                            em { text("hochwertige Handwerkskunst und zeitloses Design") }
+                            text(".")
+                        }
 
                         a(href = "/werbevideo", classes = "product-link") {
-                            text("➡ Mehr erfahren")
+                            text("🎥 ➡ Mehr erfahren")
                         }
                     }
                 }
@@ -106,20 +172,31 @@ fun HTML.homePage() {
 
                 div(classes = "team-section") {
                     div(classes = "team-info") {
-                        h2 { text("Unser Team") }
-                        p { text("Unser Team besteht aus erfahrenen Experten, die mit Leidenschaft an innovativen Lösungen arbeiten.") }
-                        p { text("Jeder einzelne bringt seine einzigartigen Fähigkeiten ein, um unseren Kunden das beste Erlebnis zu bieten.") }
+                        h2 { text("Unser Team – Gemeinsam zur Innovation") }
+
+                        p {
+                            text("Dieses Projekt wäre nicht möglich gewesen ohne unser ")
+                            strong { text("leidenschaftliches und engagiertes Team.") }
+                        }
+
+                        p {
+                            text("Jede Person hat ihre ")
+                            em { text("einzigartigen Fähigkeiten") }
+                            text(" eingebracht – von Design über Technik bis hin zur Umsetzung.")
+                        }
+
+                        p {
+                            text("Unsere gemeinsame Vision? ")
+                            strong { text("Ein Produkt, das begeistert, inspiriert und den Alltag erleichtert.") }
+                        }
                     }
+
                     div(classes = "team-image") {
-                        img(src = "/static/permaImages/TeamImage.JPG", alt = "Unser Team", classes = "team-photo")
+                        img(src = "/static/permaImages/TeamImage.jpeg", alt = "Unser Team", classes = "team-photo")
                     }
                 }
             }
         }
-
         script(src = "/static/scripts/adjustSpacer.js") {}
     }
 }
-
-
-
