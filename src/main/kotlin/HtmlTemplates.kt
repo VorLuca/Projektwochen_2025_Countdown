@@ -46,7 +46,7 @@ fun HTML.werbevideoPage() {
             attributes["controls"] = "true"
             attributes["preload"] = "auto"
             source {
-                attributes["src"] = "/videos/Key_Tree_Demostration_compressed.m4v"
+                attributes["src"] = "/videos/Key_Tree_Demostration_small.m4v"
                 attributes["type"] = "video/x-m4v"
             }
         }
